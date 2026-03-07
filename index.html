@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeneRisk AI — DNA Cancer Risk Analyzer</title>
+  <meta name="description" content="Analyze your DNA and get AI-powered cancer risk probability scores instantly." />
+  <meta property="og:title" content="GeneRisk AI" />
+  <meta property="og:description" content="DNA-Powered Cancer Risk Analyzer" />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧬</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas"></canvas>
+
+  <!-- Three.js DNA Canvas -->
+  <canvas id="dna-canvas"></canvas>
+
+  <!-- Glassmorphism Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <span class="logo-icon">🧬</span>
+        <span class="logo-text">GeneRisk AI</span>
+      </div>
+      <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#home" class="nav-link active">Home</a></li>
+        <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+        <li><a href="#analyze" class="nav-link">Analyze</a></li>
+        <li><a href="#results" class="nav-link">Results</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <div class="hero-badge gsap-fade">
+        <span class="badge-dot"></span>
+        <span>AI-Powered Genomics · Next Generation</span>
+      </div>
+
+      <h1 class="hero-title gsap-fade">
+        <span class="title-line">GeneRisk</span>
+        <span class="title-line accent">AI</span>
+      </h1>
+
+      <p class="hero-subtitle gsap-fade">DNA-Powered Cancer Risk Analyzer</p>
+
+      <p class="hero-tagline gsap-fade">Predict. Prevent. Protect.</p>
+
+      <div class="hero-cta gsap-fade">
+        <a href="#analyze" class="cta-button" id="cta-btn">
+          <span class="cta-text">Analyze Your DNA</span>
+          <span class="cta-arrow">→</span>
+          <div class="cta-glow"></div>
+        </a>
+        <a href="#how-it-works" class="cta-secondary">
+          See How It Works ↓
+        </a>
+      </div>
+
+      <div class="hero-stats gsap-fade">
+        <div class="stat-item">
+          <span class="stat-number" data-target="98.7">0</span><span class="stat-unit">%</span>
+          <span class="stat-label">Accuracy Rate</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="2.4">0</span><span class="stat-unit">M+</span>
+          <span class="stat-label">Genomes Analyzed</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="47">0</span><span class="stat-unit">+</span>
+          <span class="stat-label">Cancer Markers</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator gsap-fade">
+      <div class="scroll-dot"></div>
+      <span>Scroll to explore</span>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="section how-it-works" id="how-it-works">
+    <div class="section-container">
+      <div class="section-header hiw-header">
+        <span class="section-tag">Process</span>
+        <h2 class="section-title hiw-title">How It Works</h2>
+        <p class="section-desc">Three powerful steps powered by machine learning and genomic science.</p>
+      </div>
+      <div class="steps-row">
+        <!-- Step 01 -->
+        <div class="step-card hiw-card" data-step="01">
+          <div class="step-glow-border"></div>
+          <div class="step-number-badge">Step <span class="step-num">01</span></div>
+          <div class="step-icon-wrap">
+            <div class="step-icon">🧬</div>
+            <div class="step-icon-ring"></div>
+          </div>
+          <h3 class="step-title">Input Your DNA</h3>
+          <p class="step-desc">Paste your raw DNA sequence or manually select known gene mutations like BRCA1, TP53,
+            KRAS</p>
+          <div class="step-shine"></div>
+        </div>
+
+        <!-- Arrow 1 -->
+        <div class="step-arrow" aria-hidden="true">
+          <svg viewBox="0 0 80 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="arrowGrad1" x1="0" y1="12" x2="80" y2="12" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#00B4D8" stop-opacity="0.2" />
+                <stop offset="50%" stop-color="#00B4D8" stop-opacity="1" />
+                <stop offset="100%" stop-color="#48CAE4" stop-opacity="0.8" />
+              </linearGradient>
+              <filter id="arrowGlow1">
+                <feGaussianBlur stdDeviation="2" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            <line x1="0" y1="12" x2="68" y2="12" stroke="url(#arrowGrad1)" stroke-width="2" filter="url(#arrowGlow1)" />
+            <polyline points="60,4 72,12 60,20" stroke="#00B4D8" stroke-width="2" fill="none" stroke-linecap="round"
+              stroke-linejoin="round" filter="url(#arrowGlow1)" />
+          </svg>
+        </div>
+
+        <!-- Step 02 -->
+        <div class="step-card hiw-card" data-step="02">
+          <div class="step-glow-border"></div>
+          <div class="step-number-badge">Step <span class="step-num">02</span></div>
+          <div class="step-icon-wrap">
+            <div class="step-icon">🤖</div>
+            <div class="step-icon-ring"></div>
+          </div>
+          <h3 class="step-title">AI Analysis</h3>
+          <p class="step-desc">Our backend cross-references your mutations against ClinVar and COSMIC gene databases
+            instantly</p>
+          <div class="step-shine"></div>
+        </div>
+
+        <!-- Arrow 2 -->
+        <div class="step-arrow" aria-hidden="true">
+          <svg viewBox="0 0 80 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="arrowGrad2" x1="0" y1="12" x2="80" y2="12" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#00B4D8" stop-opacity="0.2" />
+                <stop offset="50%" stop-color="#00B4D8" stop-opacity="1" />
+                <stop offset="100%" stop-color="#48CAE4" stop-opacity="0.8" />
+              </linearGradient>
+              <filter id="arrowGlow2">
+                <feGaussianBlur stdDeviation="2" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            <line x1="0" y1="12" x2="68" y2="12" stroke="url(#arrowGrad2)" stroke-width="2" filter="url(#arrowGlow2)" />
+            <polyline points="60,4 72,12 60,20" stroke="#00B4D8" stroke-width="2" fill="none" stroke-linecap="round"
+              stroke-linejoin="round" filter="url(#arrowGlow2)" />
+          </svg>
+        </div>
+
+        <!-- Step 03 -->
+        <div class="step-card hiw-card" data-step="03">
+          <div class="step-glow-border"></div>
+          <div class="step-number-badge">Step <span class="step-num">03</span></div>
+          <div class="step-icon-wrap">
+            <div class="step-icon">📊</div>
+            <div class="step-icon-ring"></div>
+          </div>
+          <h3 class="step-title">Risk Report</h3>
+          <p class="step-desc">Receive a detailed cancer probability report with AI-generated explanations per mutation
+          </p>
+          <div class="step-shine"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       DNA INPUT SECTION
+       ═══════════════════════════════════════════ -->
+  <section class="section dna-input-section" id="analyze">
+    <div class="section-container">
+
+      <!-- Section Header -->
+      <div class="section-header dna-section-header">
+        <span class="section-tag">Get Started</span>
+        <h2 class="section-title dna-section-title">Analyze Your DNA</h2>
+        <p class="section-desc">Choose how you'd like to provide your genetic data below.</p>
+      </div>
+
+      <!-- Main Glassmorphism Card -->
+      <div class="dna-card" id="dna-card">
+
+        <!-- Tab Navigation -->
+        <div class="dna-tabs" role="tablist" aria-label="DNA input method">
+          <button class="dna-tab active" id="tab-sequence" role="tab" aria-selected="true"
+            aria-controls="panel-sequence">
+            <span class="tab-icon">🧬</span>
+            <span>Paste DNA Sequence</span>
+          </button>
+          <button class="dna-tab" id="tab-mutations" role="tab" aria-selected="false" aria-controls="panel-mutations">
+            <span class="tab-icon">🔍</span>
+            <span>Select Gene Mutations</span>
+          </button>
+          <div class="tab-slider" id="tab-slider"></div>
+        </div>
+
+        <!-- Tab Panel 1: Paste DNA Sequence -->
+        <div class="dna-panel active" id="panel-sequence" role="tabpanel" aria-labelledby="tab-sequence">
+          <div class="sequence-label-row">
+            <label for="dna-textarea" class="dna-label">
+              DNA Sequence <span class="dna-label-format">(FASTA format)</span>
+            </label>
+            <span class="char-counter" id="char-counter">0 / 5000</span>
+          </div>
+          <div class="textarea-wrap">
+            <textarea id="dna-textarea" class="dna-textarea" maxlength="5000"
+              placeholder="Paste your FASTA format DNA sequence here... e.g. ATGCGTACG..." spellcheck="false"
+              autocomplete="off" aria-describedby="dna-error"></textarea>
+          </div>
+          <div class="dna-error" id="dna-error" role="alert" aria-live="polite"></div>
+          <div class="sequence-hints">
+            <span class="hint-chip">A</span>
+            <span class="hint-chip">T</span>
+            <span class="hint-chip">G</span>
+            <span class="hint-chip">C</span>
+            <span class="hint-text">Only these nucleotide characters are accepted</span>
+          </div>
+        </div>
+
+        <!-- Tab Panel 2: Select Gene Mutations -->
+        <div class="dna-panel" id="panel-mutations" role="tabpanel" aria-labelledby="tab-mutations">
+          <p class="mutations-label">Select one or more known gene mutations to analyze:</p>
+          <div class="mutations-grid" id="mutations-grid">
+            <button class="mutation-btn" data-gene="BRCA1" type="button">
+              <span class="mutation-check">✓</span>BRCA1
+            </button>
+            <button class="mutation-btn" data-gene="BRCA2" type="button">
+              <span class="mutation-check">✓</span>BRCA2
+            </button>
+            <button class="mutation-btn" data-gene="TP53" type="button">
+              <span class="mutation-check">✓</span>TP53
+            </button>
+            <button class="mutation-btn" data-gene="KRAS" type="button">
+              <span class="mutation-check">✓</span>KRAS
+            </button>
+            <button class="mutation-btn" data-gene="EGFR" type="button">
+              <span class="mutation-check">✓</span>EGFR
+            </button>
+            <button class="mutation-btn" data-gene="MLH1" type="button">
+              <span class="mutation-check">✓</span>MLH1
+            </button>
+            <button class="mutation-btn" data-gene="APC" type="button">
+              <span class="mutation-check">✓</span>APC
+            </button>
+            <button class="mutation-btn" data-gene="PTEN" type="button">
+              <span class="mutation-check">✓</span>PTEN
+            </button>
+            <button class="mutation-btn" data-gene="RB1" type="button">
+              <span class="mutation-check">✓</span>RB1
+            </button>
+            <button class="mutation-btn" data-gene="CDKN2A" type="button">
+              <span class="mutation-check">✓</span>CDKN2A
+            </button>
+          </div>
+          <p class="mutations-hint" id="mutations-hint">
+            <span class="hint-warn-icon">⚠</span> Select at least one mutation to continue.
+          </p>
+        </div>
+
+        <!-- Submit Row -->
+        <div class="dna-submit-row">
+          <div class="submit-secure-badges">
+            <span class="secure-badge">🔒 256-bit AES encrypted</span>
+            <span class="secure-badge">✓ HIPAA compliant</span>
+          </div>
+          <button class="dna-submit-btn" id="dna-submit-btn" type="button" disabled>
+            <span class="submit-icon">🔬</span>
+            <span class="submit-text">Analyze Now</span>
+            <div class="submit-glow"></div>
+          </button>
+        </div>
+
+      </div><!-- /.dna-card -->
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       LOADING OVERLAY
+       ═══════════════════════════════════════════ -->
+  <div class="loading-overlay" id="loading-overlay" aria-hidden="true" aria-label="DNA Analysis in progress">
+    <div class="loading-content">
+
+      <!-- Header Text -->
+      <p class="loading-header-text">GeneRisk AI is analyzing your DNA...</p>
+
+      <!-- CSS Animated DNA Double Helix -->
+      <div class="loading-dna-helix" aria-hidden="true">
+        <div class="helix-container">
+          <div class="helix-strand strand-a">
+            <div class="helix-node n1"></div>
+            <div class="helix-node n2"></div>
+            <div class="helix-node n3"></div>
+            <div class="helix-node n4"></div>
+            <div class="helix-node n5"></div>
+            <div class="helix-node n6"></div>
+            <div class="helix-node n7"></div>
+            <div class="helix-node n8"></div>
+          </div>
+          <div class="helix-strand strand-b">
+            <div class="helix-node n1"></div>
+            <div class="helix-node n2"></div>
+            <div class="helix-node n3"></div>
+            <div class="helix-node n4"></div>
+            <div class="helix-node n5"></div>
+            <div class="helix-node n6"></div>
+            <div class="helix-node n7"></div>
+            <div class="helix-node n8"></div>
+          </div>
+          <!-- Base pair rungs -->
+          <div class="helix-rungs">
+            <div class="helix-rung" style="--rung-index:0"></div>
+            <div class="helix-rung" style="--rung-index:1"></div>
+            <div class="helix-rung" style="--rung-index:2"></div>
+            <div class="helix-rung" style="--rung-index:3"></div>
+            <div class="helix-rung" style="--rung-index:4"></div>
+            <div class="helix-rung" style="--rung-index:5"></div>
+            <div class="helix-rung" style="--rung-index:6"></div>
+            <div class="helix-rung" style="--rung-index:7"></div>
+          </div>
+        </div>
+        <!-- Glow orbs behind helix -->
+        <div class="helix-glow glow-teal"></div>
+        <div class="helix-glow glow-pink"></div>
+      </div>
+
+      <!-- Progress Steps -->
+      <div class="loading-steps-list" id="loading-steps-list">
+        <div class="ls-step" id="ls-step-0">
+          <span class="ls-check">✅</span>
+          <span class="ls-text">Parsing DNA sequence...</span>
+        </div>
+        <div class="ls-step" id="ls-step-1">
+          <span class="ls-check">✅</span>
+          <span class="ls-text">Identifying mutations...</span>
+        </div>
+        <div class="ls-step" id="ls-step-2">
+          <span class="ls-check">✅</span>
+          <span class="ls-text">Cross-referencing ClinVar database...</span>
+        </div>
+        <div class="ls-step" id="ls-step-3">
+          <span class="ls-check">✅</span>
+          <span class="ls-text">Running AI risk analysis...</span>
+        </div>
+        <div class="ls-step" id="ls-step-4">
+          <span class="ls-check">✅</span>
+          <span class="ls-text">Generating your report...</span>
+        </div>
+      </div>
+
+      <!-- Teal Progress Bar -->
+      <div class="loading-bar-wrap">
+        <div class="loading-bar-fill" id="loading-bar-fill"></div>
+        <div class="loading-bar-glow"></div>
+      </div>
+      <p class="loading-bar-pct" id="loading-bar-pct">0%</p>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       RESULTS DASHBOARD SECTION
+       ═══════════════════════════════════════════ -->
+  <section class="section dashboard-section" id="results" aria-label="Cancer Risk Dashboard">
+
+    <!-- ── Summary Card ────────────────────────────────────── -->
+    <div class="dashboard-summary-card" id="dashboard-summary">
+      <div class="summary-left">
+        <div class="dashboard-title-row">
+          <span class="dashboard-dna-icon">🧬</span>
+          <h2 class="dashboard-title">Your GeneRisk Report</h2>
+        </div>
+        <div class="summary-meta-row">
+          <div class="summary-meta-item">
+            <span class="summary-meta-label">Mutations Detected</span>
+            <span class="summary-meta-value" id="summary-mutations">BRCA1, TP53</span>
+          </div>
+          <div class="summary-divider"></div>
+          <div class="summary-meta-item">
+            <span class="summary-meta-label">Overall Risk Level</span>
+            <span class="risk-badge high-badge" id="summary-risk-badge">⚠ HIGH RISK</span>
+          </div>
+          <div class="summary-divider"></div>
+          <div class="summary-meta-item">
+            <span class="summary-meta-label">Analysis Date</span>
+            <span class="summary-meta-value">March 7, 2026</span>
+          </div>
+        </div>
+      </div>
+      <div class="summary-right">
+        <button class="download-btn" id="download-pdf-btn" aria-label="Download PDF Report">
+          <span class="download-icon">⬇</span>
+          <span class="download-text">Download Report</span>
+          <div class="download-glow"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- ── Dashboard Grid ──────────────────────────────────── -->
+    <div class="dashboard-grid" id="dashboard-grid">
+
+      <!-- SECTION 1 (left, large): Radar Chart -->
+      <div class="dash-card radar-card" id="dash-radar">
+        <div class="dash-card-header">
+          <span class="dash-card-icon">🕸</span>
+          <h3 class="dash-card-title">Cancer Risk Radar</h3>
+        </div>
+        <div id="radar-chart-root" class="radar-chart-wrap" aria-label="Radar chart of cancer risk scores">
+          <svg id="radarSVG"></svg>
+        </div>
+      </div>
+
+      <!-- SECTION 2 (right top): Circular Progress Rings -->
+      <div class="dash-card rings-card" id="dash-rings">
+        <div class="dash-card-header">
+          <span class="dash-card-icon">📊</span>
+          <h3 class="dash-card-title">Risk Score Breakdown</h3>
+        </div>
+        <div class="rings-grid" id="rings-grid">
+          <!-- Rings are injected by JS -->
+        </div>
+      </div>
+
+      <!-- SECTION 3 (left bottom): Mutations Table -->
+      <div class="dash-card mutations-card" id="dash-mutations">
+        <div class="dash-card-header">
+          <span class="dash-card-icon">🔬</span>
+          <h3 class="dash-card-title">Detected Mutations</h3>
+        </div>
+        <div class="mutations-table-wrap">
+          <table class="mutations-table" aria-label="Detected gene mutations">
+            <thead>
+              <tr>
+                <th>Gene</th>
+                <th>Mutation Type</th>
+                <th>Risk Level</th>
+                <th>Cancer Association</th>
+              </tr>
+            </thead>
+            <tbody id="mutations-tbody">
+              <!-- Rows injected by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SECTION 4 (right bottom): AI Explanation -->
+      <div class="dash-card ai-card" id="dash-ai">
+        <div class="dash-card-header">
+          <span class="dash-card-icon">🤖</span>
+          <h3 class="dash-card-title">What This Means</h3>
+        </div>
+        <div class="ai-content">
+          <div class="ai-gemini-badge">
+            <span class="gemini-dot"></span>
+            <span>Gemini AI Analysis</span>
+          </div>
+          <p class="ai-typewriter-text" id="ai-typewriter" aria-live="polite"></p>
+          <button id="ai-retry-btn" class="ai-retry-btn hidden" type="button">Retry AI Explanation 🔄</button>
+          <div class="ai-disclaimer">⚕ This analysis is AI-generated and should not replace professional medical advice.
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.dashboard-grid -->
+
+    <!-- ── Recommendation Cards ────────────────────────────── -->
+    <div class="recommendations-section">
+      <h3 class="recommendations-title">Personalised Recommendations</h3>
+      <div class="recommendations-row" id="recommendations-row">
+
+        <div class="rec-card" id="rec-diet">
+          <div class="rec-icon">🥦</div>
+          <h4 class="rec-title">Diet & Nutrition</h4>
+          <ul class="rec-list">
+            <li>Increase cruciferous vegetables (broccoli, cauliflower)</li>
+            <li>Limit processed meats and red meat consumption</li>
+            <li>Add antioxidant-rich foods (berries, green tea)</li>
+            <li>Maintain healthy BMI — obesity amplifies BRCA1 risk</li>
+          </ul>
+          <div class="rec-badge">Nutrition Protocol</div>
+        </div>
+
+        <div class="rec-card" id="rec-screening">
+          <div class="rec-icon">🏥</div>
+          <h4 class="rec-title">Screening Schedule</h4>
+          <ul class="rec-list">
+            <li>Annual mammogram starting age 25 (BRCA1 carrier)</li>
+            <li>Bi-annual breast MRI with contrast</li>
+            <li>Annual low-dose CT lung scan</li>
+            <li>Colonoscopy every 5 years from age 40</li>
+          </ul>
+          <div class="rec-badge">Medical Protocol</div>
+        </div>
+
+        <div class="rec-card" id="rec-lifestyle">
+          <div class="rec-icon">🏃</div>
+          <h4 class="rec-title">Lifestyle Changes</h4>
+          <ul class="rec-list">
+            <li>150 min moderate aerobic exercise weekly</li>
+            <li>Avoid tobacco — TP53 mutation amplifies lung risk</li>
+            <li>Limit alcohol to ≤1 unit/day</li>
+            <li>Consider genetic counselling for family members</li>
+          </ul>
+          <div class="rec-badge">Wellness Protocol</div>
+        </div>
+
+      </div>
+    </div><!-- /.recommendations-section -->
+
+  </section><!-- /#results -->
+
+  <!-- Custom Cursor -->
+  <div class="custom-cursor" id="custom-cursor"></div>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" id="back-to-top" aria-label="Back to top">
+    <span class="btt-icon">⬆</span>
+  </button>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <span class="logo-icon">🧬</span>
+        <span class="logo-text">GeneRisk AI</span>
+      </div>
+      <p class="footer-tagline">Predict. Prevent. Protect.</p>
+      <p class="footer-copy">For educational purposes only. Consult a medical professional.</p>
+      <div class="footer-links">
+        <a href="#home">Home</a><span class="footer-sep">|</span><a href="#analyze">Analyze</a><span
+          class="footer-sep">|</span><a href="#how-it-works">How It Works</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <!-- React + ReactDOM (for Recharts) -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Recharts -->
+  <script src="https://unpkg.com/recharts@2.12.7/umd/Recharts.js"></script>
+  <!-- html2canvas + jsPDF for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- Gemini API config (must load before main.js) -->
+  <script src="config.js"></script>
+  <script src="main.js"></script>
+</body>
+
+</html>
