@@ -898,14 +898,13 @@ gsap.registerPlugin(ScrollTrigger);
 // ═══════════════════════════════════════════════════════════
 (function initDashboard() {
 
-  /* ─── Baseline fallback scores (no mutations) ─────────── */
-  var FALLBACK_SCORES = [
-    { name: 'Breast', pct: 12 },
-    { name: 'Lung', pct: 11 },
-    { name: 'Colon', pct: 10 },
-    { name: 'Ovarian', pct: 13 },
-    { name: 'Blood', pct: 10 },
-  ];
+  /* ─── Baseline fallback scores ─────────────────────────── */
+  const FALLBACK_SCORES = {
+    'BRCA1': {breast:75, lung:20, colon:15, ovarian:60, blood:15},
+    'TP53':  {breast:30, lung:65, colon:55, ovarian:25, blood:50},
+    'KRAS':  {breast:20, lung:70, colon:65, ovarian:15, blood:20},
+    'NONE':  {breast:12, lung:10, colon:11, ovarian:10, blood:10}
+  };
 
   /* ─── Gene rule definitions ─────────────────────────── */
   var GENE_RULES = {
@@ -1007,13 +1006,6 @@ gsap.registerPlugin(ScrollTrigger);
       return getFallbackData(mutations);
     }
   }
-
-  const FALLBACK_SCORES = {
-    'BRCA1': {breast:75, lung:20, colon:15, ovarian:60, blood:15},
-    'TP53':  {breast:30, lung:65, colon:55, ovarian:25, blood:50},
-    'KRAS':  {breast:20, lung:70, colon:65, ovarian:15, blood:20},
-    'NONE':  {breast:12, lung:10, colon:11, ovarian:10, blood:10}
-  };
 
   function getFallbackData(mutations) {
     let primary = 'NONE';
