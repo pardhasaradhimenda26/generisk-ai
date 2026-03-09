@@ -1008,12 +1008,7 @@ gsap.registerPlugin(ScrollTrigger);
   }
 
   function getFallbackData(mutations) {
-    let primary = 'NONE';
-    if (mutations.includes('BRCA1') || mutations.includes('BRCA2') || mutations.includes('PTEN')) primary = 'BRCA1';
-    else if (mutations.includes('TP53')) primary = 'TP53';
-    else if (mutations.includes('KRAS') || mutations.includes('EGFR') || mutations.includes('CDKN2A')) primary = 'KRAS';
-    else if (mutations.length > 0) primary = 'TP53'; // fallback for other mutations
-
+    const primary = mutations.length > 0 ? mutations[0] : 'NONE';
     const scoreMap = FALLBACK_SCORES[primary] || FALLBACK_SCORES['NONE'];
     const riskLevel = (primary === 'NONE') ? 'LOW' : 'HIGH';
 
@@ -1110,66 +1105,204 @@ gsap.registerPlugin(ScrollTrigger);
   }
 
   /* ─── AI card states ─────────────────────────────────── */
-  function showAILoading() {
-    var el = document.getElementById('ai-typewriter');
-    var retryBtn = document.getElementById('ai-retry-btn');
-    if (!el) return;
-    el.classList.remove('ai-error-msg', 'done');
-    el.classList.add('ai-loading-pulse');
-    el.textContent = '\uD83E\uDD16 Generating AI analysis\u2026';
-    if (retryBtn) retryBtn.classList.add('hidden');
+  /* ─── Helpers ────────────────────────────────────────── */
+  function riskClass(pct) {
+    if (pct > 60) return 'high';
+    if (pct > 29) return 'mid';
+    return 'low';
   }
 
-  function showAIError(code) {
+  function badgeStyle(level) {
+    if (level === 'HIGH') return 'background:rgba(239,68,68,0.18);border:1px solid rgba(239,68,68,0.55);color:#FCA5A5;';
+    if (level === 'MEDIUM') return 'background:rgba(251,191,36,0.15);border:1px solid rgba(251,191,36,0.45);color:#FDE68A;';
+    return 'background:rgba(52,211,153,0.15);border:1px solid rgba(52,211,153,0.4);color:#6EE7B7;';
+  }
+
+  /* ─── 1. Radar Chart ─────────────────────────────────── */
+  function drawRadar(scores) {
+    const svg = document.getElementById('radarSVG');
+    if (!svg) return;
+    svg.innerHTML = '';
+    svg.setAttribute('viewBox', '0 0 500 400');
+    svg.style.width = '100%';
+    svg.style.height = '350px';
+
+    const cx = 250, cy = 200, maxR = 140;
+    const labels = ['Breast', 'Lung', 'Colon', 'Ovarian', 'Blood'];
+    const values = [scores.breast, scores.lung, scores.colon, scores.ovarian, scores.blood];
+    const angles = labels.map((_, i) => (i * 2 * Math.PI / 5) - Math.PI / 2);
+
+    // Draw grid pentagons
+    [0.33, 0.66, 1.0].forEach(scale => {
+      const pts = angles.map(a => `${cx + maxR * scale * Math.cos(a)},${cy + maxR * scale * Math.sin(a)}`).join(' ');
+      const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+      poly.setAttribute('points', pts);
+      poly.setAttribute('fill', 'none');
+      poly.setAttribute('stroke', 'rgba(255,255,255,0.1)');
+      poly.setAttribute('stroke-dasharray', '4,4');
+      svg.appendChild(poly);
+    });
+
+    // Draw axis lines
+    angles.forEach(a => {
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', cx); line.setAttribute('y1', cy);
+      line.setAttribute('x2', cx + maxR * Math.cos(a));
+      line.setAttribute('y2', cy + maxR * Math.sin(a));
+      line.setAttribute('stroke', 'rgba(255,255,255,0.15)');
+      svg.appendChild(line);
+    });
+
+    // Draw data polygon
+    const dataPts = angles.map((a, i) => {
+      const r = (values[i] / 100) * maxR;
+      return `${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`;
+    }).join(' ');
+    const dataPoly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+    dataPoly.setAttribute('points', dataPts);
+    dataPoly.setAttribute('fill', 'rgba(0,180,216,0.3)');
+    dataPoly.setAttribute('stroke', '#00B4D8');
+    dataPoly.setAttribute('stroke-width', '2');
+    svg.appendChild(dataPoly);
+
+    // Draw dots and labels
+    angles.forEach((a, i) => {
+      const r = (values[i] / 100) * maxR;
+      const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      dot.setAttribute('cx', cx + r * Math.cos(a));
+      dot.setAttribute('cy', cy + r * Math.sin(a));
+      dot.setAttribute('r', '5');
+      dot.setAttribute('fill', '#00B4D8');
+      svg.appendChild(dot);
+
+      const labelR = maxR + 25;
+      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('x', cx + labelR * Math.cos(a));
+      text.setAttribute('y', cy + labelR * Math.sin(a));
+      text.setAttribute('fill', 'white');
+      text.setAttribute('font-size', '13');
+      text.setAttribute('text-anchor', 'middle');
+      text.setAttribute('dominant-baseline', 'middle');
+      text.textContent = labels[i];
+      svg.appendChild(text);
+    });
+  }
+
+  /* ─── 2. Circular Progress Rings ─────────────────────── */
+  function mountRings(scores) {
+    var grid = document.getElementById('rings-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    // Transform scores object to array for mapping
+    var items = [
+      { name: 'Breast', pct: parseInt(scores.breast) || 0 },
+      { name: 'Lung', pct: parseInt(scores.lung) || 0 },
+      { name: 'Colon', pct: parseInt(scores.colon) || 0 },
+      { name: 'Ovarian', pct: parseInt(scores.ovarian) || 0 },
+      { name: 'Blood', pct: parseInt(scores.blood) || 0 }
+    ];
+
+    items.forEach(function (item) {
+      var rc = riskClass(item.pct);
+      var Rr = 32;
+      var circ = 2 * Math.PI * Rr;
+      var targetOffset = circ * (1 - item.pct / 100);
+      var div = document.createElement('div');
+      div.className = 'ring-item';
+      div.innerHTML =
+        '<div class="ring-svg-wrap">' +
+        '<svg class="ring-svg" viewBox="0 0 80 80">' +
+        '<circle class="ring-track" cx="40" cy="40" r="' + Rr + '"/>' +
+        '<circle class="ring-fill ring-' + rc + '" cx="40" cy="40" r="' + Rr + '"' +
+        ' stroke-dasharray="' + circ + '" stroke-dashoffset="' + circ + '" data-offset="' + targetOffset + '"/>' +
+        '</svg>' +
+        '<div class="ring-label-center"><span class="ring-pct pct-' + rc + '">' + item.pct + '%</span></div>' +
+        '</div><span class="ring-name">' + item.name + '</span>';
+      grid.appendChild(div);
+    });
+
+    // Force animation trigger
+    setTimeout(function() {
+      document.querySelectorAll('.ring-fill').forEach(function (circle) {
+        var target = parseFloat(circle.dataset.offset);
+        requestAnimationFrame(function () { circle.style.strokeDashoffset = target; });
+      });
+    }, 100);
+  }
+
+  /* ─── 3. Mutations Table ──────────────────────────────── */
+  function mountMutationsTable(analysisData) {
+    var tbody = document.getElementById('mutations-tbody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    if (!analysisData.mutationDetails || analysisData.mutationDetails.length === 0) {
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<td colspan="4" style="text-align:center;opacity:0.5;padding:1.5rem 0;">No mutations detected \u2014 baseline risk profile shown</td>';
+      tbody.appendChild(tr);
+      return;
+    }
+
+    analysisData.mutationDetails.forEach(function (row) {
+      var rc = row.risk === 'HIGH' ? 'high' : row.risk === 'MEDIUM' ? 'mid' : 'low';
+      var geneColor = rc === 'high' ? '#FCA5A5' : rc === 'mid' ? '#FDE68A' : '#6EE7B7';
+      var tr = document.createElement('tr');
+      tr.className = 'row-' + rc;
+      tr.innerHTML =
+        '<td><span class="mt-gene" style="color:' + geneColor + '">' + row.gene + '</span></td>' +
+        '<td><span class="mt-type">' + row.type + '</span></td>' +
+        '<td><span class="mt-badge" style="' + badgeStyle(row.risk) + '">' + row.risk + '</span></td>' +
+        '<td><span class="mt-cancer">' + row.cancer + '</span></td>';
+      tbody.appendChild(tr);
+    });
+  }
+
+  /* ─── 4. Typewriter ───────────────────────────────────── */
+  function runTypewriter(text) {
     var el = document.getElementById('ai-typewriter');
-    var retryBtn = document.getElementById('ai-retry-btn');
     if (!el) return;
-    el.classList.remove('ai-loading-pulse', 'done');
-    el.classList.add('ai-error-msg');
-    el.textContent = 'Unable to connect to ML Model. Please try again.';
-    if (retryBtn) retryBtn.classList.remove('hidden');
+    el.textContent = '';
+    el.classList.remove('ai-error-msg', 'ai-loading-pulse', 'done');
+    var idx = 0;
+    var iv = setInterval(function () {
+      if (idx < text.length) { el.textContent = text.slice(0, idx + 1); idx++; }
+      else { clearInterval(iv); el.classList.add('done'); }
+    }, 18);
   }
 
   /* ─── Dashboard Orchestrator ─────────────────────────── */
   async function runDashboardUpdate() {
     var analysisData = detectMutations();
     showAILoading();
-    var mutations = analysisData.mutations;
+    var detectedMutations = analysisData.mutations;
+
+    // Requested Logic: Determine primary mutation and fallback scores
+    const primaryMutation = detectedMutations.length > 0 ? detectedMutations[0] : 'NONE';
+    const scores = FALLBACK_SCORES[primaryMutation] || FALLBACK_SCORES['NONE'];
+    
+    console.log('Scores being used:', scores);
 
     try {
-      var result = await fetchPredictAPI(mutations);
+      // Try fetching from Local API (if available)
+      var result = await fetchPredictAPI(detectedMutations);
       console.log('ML API Result:', result);
       
+      // Update data with result (which falls back to getFallbackData internally)
       analysisData.overallRisk = result.risk_level;
       analysisData.explanation = result.explanation;
-      analysisData.riskScores = [
-        { name: 'Breast', pct: parseInt(result.scores.breast) || 0 },
-        { name: 'Lung', pct: parseInt(result.scores.lung) || 0 },
-        { name: 'Colon', pct: parseInt(result.scores.colon) || 0 },
-        { name: 'Ovarian', pct: parseInt(result.scores.ovarian) || 0 },
-        { name: 'Blood', pct: parseInt(result.scores.blood) || 0 }
-      ];
+      
+      // Use result.scores (which will be equivalent to 'scores' variable above if API fails)
+      const finalScores = result.scores;
 
       updateSummaryCard(analysisData);
-      mountRings(analysisData);
+      mountRings(finalScores);
       mountMutationsTable(analysisData);
       runTypewriter(analysisData.explanation);
-
-      setTimeout(function () {
-        var scoresObj = { breast: 0, lung: 0, colon: 0, ovarian: 0, blood: 0 };
-        if (analysisData && analysisData.riskScores) {
-          analysisData.riskScores.forEach(function (s) {
-            scoresObj[s.name.toLowerCase()] = s.pct;
-          });
-        }
-        if (typeof drawRadar === 'function') drawRadar(scoresObj);
-
-        // Map progress rings and force animation
-        document.querySelectorAll('.ring-fill').forEach(function (circle) {
-          var target = parseFloat(circle.dataset.offset);
-          requestAnimationFrame(function () { circle.style.strokeDashoffset = target; });
-        });
-      }, 300);
+      
+      if (typeof drawRadar === 'function') {
+        drawRadar(finalScores);
+      }
 
     } catch (err) {
       console.error("Dashboard update failed:", err);
