@@ -1008,44 +1008,47 @@ gsap.registerPlugin(ScrollTrigger);
     }
   }
 
+  const FALLBACK_SCORES = {
+    'BRCA1': {breast:75, lung:20, colon:15, ovarian:60, blood:15},
+    'TP53':  {breast:30, lung:65, colon:55, ovarian:25, blood:50},
+    'KRAS':  {breast:20, lung:70, colon:65, ovarian:15, blood:20},
+    'NONE':  {breast:12, lung:10, colon:11, ovarian:10, blood:10}
+  };
+
   function getFallbackData(mutations) {
-    // Mimic the exact structure returned by the python API
-    if (mutations.includes('BRCA1') || mutations.includes('BRCA2') || mutations.includes('PTEN')) {
-      return {
-        scores: { breast: 75, lung: 20, colon: 15, ovarian: 60, blood: 15 },
-        risk_level: 'HIGH',
-        explanation: getFallbackExplanation(mutations),
-        confidence: 94.2
-      };
-    } else if (mutations.includes('TP53')) {
-      return {
-        scores: { breast: 30, lung: 65, colon: 55, ovarian: 25, blood: 50 },
-        risk_level: 'HIGH',
-        explanation: getFallbackExplanation(mutations),
-        confidence: 91.5
-      };
-    } else if (mutations.includes('KRAS') || mutations.includes('EGFR') || mutations.includes('CDKN2A')) {
-      return {
-        scores: { breast: 20, lung: 70, colon: 65, ovarian: 15, blood: 20 },
-        risk_level: 'HIGH',
-        explanation: getFallbackExplanation(mutations),
-        confidence: 92.8
-      };
-    } else if (mutations.length > 0) {
-      return {
-        scores: { breast: 25, lung: 25, colon: 45, ovarian: 20, blood: 35 },
-        risk_level: 'MEDIUM',
-        explanation: getFallbackExplanation(mutations),
-        confidence: 88.0
-      };
+    let primary = 'NONE';
+    if (mutations.includes('BRCA1') || mutations.includes('BRCA2') || mutations.includes('PTEN')) primary = 'BRCA1';
+    else if (mutations.includes('TP53')) primary = 'TP53';
+    else if (mutations.includes('KRAS') || mutations.includes('EGFR') || mutations.includes('CDKN2A')) primary = 'KRAS';
+    else if (mutations.length > 0) primary = 'TP53'; // fallback for other mutations
+
+    const scoreMap = FALLBACK_SCORES[primary] || FALLBACK_SCORES['NONE'];
+    const riskLevel = (primary === 'NONE') ? 'LOW' : 'HIGH';
+
+    return {
+      scores: scoreMap,
+      risk_level: riskLevel,
+      explanation: getFallbackExplanation(mutations),
+      confidence: primary === 'NONE' ? 98.1 : 92.5
+    };
+  }
+
+  function updateSummaryCard(data) {
+    var mutationsEl = document.getElementById('summary-mutations');
+    var riskEl = document.getElementById('summary-risk-badge');
+    
+    if (mutationsEl) {
+      mutationsEl.textContent = (data.mutations && data.mutations.length > 0) ? data.mutations.join(', ') : 'None';
     }
     
-    return {
-      scores: { breast: 12, lung: 11, colon: 10, ovarian: 13, blood: 10 },
-      risk_level: 'LOW',
-      explanation: getFallbackExplanation([]),
-      confidence: 98.1
-    };
+    if (riskEl) {
+      var risk = data.overallRisk || 'LOW';
+      riskEl.textContent = '⚠ ' + risk.toUpperCase() + ' RISK';
+      riskEl.className = 'risk-badge';
+      if (risk === 'HIGH') riskEl.classList.add('high-badge');
+      else if (risk === 'MEDIUM') riskEl.classList.add('medium-badge');
+      else riskEl.classList.add('low-badge');
+    }
   }
 
   function getFallbackExplanation(mutations) {
