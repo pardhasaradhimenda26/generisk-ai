@@ -983,298 +983,32 @@ gsap.registerPlugin(ScrollTrigger);
     return { mutations: activeGenes, overallRisk: overallRisk, riskScores: riskScores, mutationDetails: mutationDetails };
   }
 
-  /* ─── Step 2: Gemini API Call ────────────────────────── */
-  async function callGeminiAI(mutations) {
-    // Replace YOUR_API_KEY with the actual Gemini API key
-    var key = typeof GEMINI_API_KEY !== 'undefined' ? GEMINI_API_KEY : 'YOUR_API_KEY_FROM_AISTUDIO_GOOGLE_COM';
+  /* ─── 5. Orchestrate Data Fetch ────────────────────────── */
+  async function fetchPredictAPI(mutations) {
+    var response = await fetch('http://localhost:5000/predict', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ mutations: mutations })
+    });
+    if (!response.ok) throw new Error('API_ERROR');
+    return await response.json();
+  }
 
-    var endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=' + key;
-
-    var promptText = "";
-    if (mutations && mutations.length > 0) {
-      var mutationList = mutations.join(', ');
-      promptText = "You are a medical AI assistant. The patient has these gene mutations detected: " + mutationList + ". Explain in 3-4 simple sentences what this means for their cancer risk. Be informative, not alarming. End with one positive action they can take.";
+  function getFallbackExplanation(mutations) {
+    if (mutations.includes('BRCA1')) {
+      return "The BRCA1 mutation is a tumor suppressor gene mutation that significantly increases the risk of breast and ovarian cancer. Individuals with this mutation have up to a 75% lifetime risk of developing breast cancer. However, early detection through regular screenings dramatically improves outcomes. We recommend scheduling a consultation with a genetic counselor as a positive first step.";
+    } else if (mutations.includes('TP53')) {
+      return "The TP53 mutation affects the body's primary tumor suppressor gene, increasing risk across multiple cancer types including lung, colon, and blood cancers. Regular screening and a healthy lifestyle can significantly reduce your overall risk. Consult an oncologist for a personalized surveillance plan.";
+    } else if (mutations.includes('KRAS')) {
+      return "The KRAS mutation is commonly associated with lung and colon cancer development. While this mutation raises your risk profile, modern targeted therapies have made KRAS-related cancers increasingly treatable. Early screening is your best defense.";
+    } else if (mutations.length === 0) {
+      return "No high-risk mutations were detected in your sample. Your baseline cancer risk profile is within normal ranges. Continue maintaining a healthy lifestyle with regular checkups as prevention is always the best medicine.";
     } else {
-      promptText = "No mutations detected. Explain that this is good news and general cancer prevention tips in 3-4 sentences.";
-    }
-
-    try {
-      var response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: promptText
-            }]
-          }]
-        })
-      });
-
-      if (response.status === 429) throw Object.assign(new Error('RATE_LIMIT'), { code: 'RATE_LIMIT' });
-      if (response.status === 400) throw Object.assign(new Error('INVALID_KEY'), { code: 'INVALID_KEY' });
-      if (!response.ok) throw Object.assign(new Error('API_ERROR'), { code: 'API_ERROR' });
-
-      var json = await response.json();
-      return json.candidates[0].content.parts[0].text;
-    } catch (err) {
-      if (err.name === 'TypeError') throw Object.assign(new Error('NETWORK_ERROR'), { code: 'NETWORK_ERROR' });
-      throw err;
+      return "Genetic markers associated with increased cancer risk were detected. Early detection and regular screening are your best tools for prevention. We recommend consulting with a healthcare professional or genetic counselor for a personalized surveillance plan.";
     }
   }
 
-  /* ─── Helpers ────────────────────────────────────────── */
-  function riskClass(pct) {
-    if (pct > 60) return 'high';
-    if (pct > 29) return 'mid';
-    return 'low';
-  }
-
-  function badgeStyle(level) {
-    if (level === 'HIGH') return 'background:rgba(239,68,68,0.18);border:1px solid rgba(239,68,68,0.55);color:#FCA5A5;';
-    if (level === 'MEDIUM') return 'background:rgba(251,191,36,0.15);border:1px solid rgba(251,191,36,0.45);color:#FDE68A;';
-    return 'background:rgba(52,211,153,0.15);border:1px solid rgba(52,211,153,0.4);color:#6EE7B7;';
-  }
-
-  /* ─── Wait for CDN libs ──────────────────────────────── */
-  function waitForLibs(callback) {
-    var needed = ['React', 'ReactDOM', 'Recharts'];
-    var poll = setInterval(function () {
-      if (needed.every(function (k) { return window[k]; })) { clearInterval(poll); callback(); }
-    }, 80);
-  }
-
-  /* ─── Update summary card ────────────────────────────── */
-  function updateSummaryCard(analysisData) {
-    var mutEl = document.getElementById('summary-mutations');
-    var badgeEl = document.getElementById('summary-risk-badge');
-    if (mutEl) mutEl.textContent = analysisData.mutations.length > 0 ? analysisData.mutations.join(', ') : 'None detected';
-    if (badgeEl) {
-      var risk = analysisData.overallRisk;
-      badgeEl.textContent = risk === 'HIGH' ? '\u26A0 HIGH RISK' : risk === 'MEDIUM' ? '\u26A1 MEDIUM RISK' : '\u2713 LOW RISK';
-      badgeEl.className = 'risk-badge ' + (risk === 'HIGH' ? 'high-badge' : risk === 'MEDIUM' ? 'medium-badge' : 'low-badge');
-    }
-  }
-
-  /* ─── 1. Radar Chart ─────────────────────────────────── */
-  function drawRadar(scores) {
-    const svg = document.getElementById('radarSVG');
-    svg.innerHTML = '';
-    svg.setAttribute('viewBox', '0 0 500 400');
-    svg.style.width = '100%';
-    svg.style.height = '350px';
-
-    const cx = 250, cy = 200, maxR = 140;
-    const labels = ['Breast', 'Lung', 'Colon', 'Ovarian', 'Blood'];
-    const values = [scores.breast, scores.lung, scores.colon,
-    scores.ovarian, scores.blood];
-    const angles = labels.map((_, i) => (i * 2 * Math.PI / 5) - Math.PI / 2);
-
-    // Draw 3 grid pentagons
-    [0.33, 0.66, 1.0].forEach(scale => {
-      const pts = angles.map(a =>
-        `${cx + maxR * scale * Math.cos(a)},${cy + maxR * scale * Math.sin(a)}`
-      ).join(' ');
-      const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-      poly.setAttribute('points', pts);
-      poly.setAttribute('fill', 'none');
-      poly.setAttribute('stroke', 'rgba(255,255,255,0.1)');
-      poly.setAttribute('stroke-dasharray', '4,4');
-      svg.appendChild(poly);
-    });
-
-    // Draw axis lines
-    angles.forEach(a => {
-      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line.setAttribute('x1', cx); line.setAttribute('y1', cy);
-      line.setAttribute('x2', cx + maxR * Math.cos(a));
-      line.setAttribute('y2', cy + maxR * Math.sin(a));
-      line.setAttribute('stroke', 'rgba(255,255,255,0.15)');
-      svg.appendChild(line);
-    });
-
-    // Draw data polygon
-    const dataPts = angles.map((a, i) => {
-      const r = (values[i] / 100) * maxR;
-      return `${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`;
-    }).join(' ');
-    const dataPoly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-    dataPoly.setAttribute('points', dataPts);
-    dataPoly.setAttribute('fill', 'rgba(0,180,216,0.3)');
-    dataPoly.setAttribute('stroke', '#00B4D8');
-    dataPoly.setAttribute('stroke-width', '2');
-    svg.appendChild(dataPoly);
-
-    // Draw dots and labels
-    angles.forEach((a, i) => {
-      const r = (values[i] / 100) * maxR;
-      const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      dot.setAttribute('cx', cx + r * Math.cos(a));
-      dot.setAttribute('cy', cy + r * Math.sin(a));
-      dot.setAttribute('r', '5');
-      dot.setAttribute('fill', '#00B4D8');
-      svg.appendChild(dot);
-
-      const labelR = maxR + 25;
-      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      text.setAttribute('x', cx + labelR * Math.cos(a));
-      text.setAttribute('y', cy + labelR * Math.sin(a));
-      text.setAttribute('fill', 'white');
-      text.setAttribute('font-size', '13');
-      text.setAttribute('text-anchor', 'middle');
-      text.setAttribute('dominant-baseline', 'middle');
-      text.textContent = labels[i];
-      svg.appendChild(text);
-    });
-  }
-
-  /* ─── 2. Circular Progress Rings ─────────────────────── */
-  function mountRings(analysisData) {
-    var grid = document.getElementById('rings-grid');
-    if (!grid) return;
-    grid.innerHTML = '';
-
-    analysisData.riskScores.forEach(function (item) {
-      var rc = riskClass(item.pct);
-      var Rr = 32;
-      var circ = 2 * Math.PI * Rr;
-      var targetOffset = circ * (1 - item.pct / 100);
-      var div = document.createElement('div');
-      div.className = 'ring-item';
-      div.innerHTML =
-        '<div class="ring-svg-wrap">' +
-        '<svg class="ring-svg" viewBox="0 0 80 80">' +
-        '<circle class="ring-track" cx="40" cy="40" r="' + Rr + '"/>' +
-        '<circle class="ring-fill ring-' + rc + '" cx="40" cy="40" r="' + Rr + '"' +
-        ' stroke-dasharray="' + circ + '" stroke-dashoffset="' + circ + '" data-offset="' + targetOffset + '"/>' +
-        '</svg>' +
-        '<div class="ring-label-center"><span class="ring-pct pct-' + rc + '">' + item.pct + '%</span></div>' +
-        '</div><span class="ring-name">' + item.name + '</span>';
-      grid.appendChild(div);
-    });
-
-    var section = document.getElementById('results');
-    var ringsAnimated = false;
-
-    function triggerAnimations() {
-      if (ringsAnimated) return;
-      ringsAnimated = true;
-      document.querySelectorAll('.ring-fill').forEach(function (circle) {
-        var target = parseFloat(circle.dataset.offset);
-        requestAnimationFrame(function () { circle.style.strokeDashoffset = target; });
-      });
-    }
-
-    var obs = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting || ringsAnimated) return;
-        triggerAnimations();
-        obs.unobserve(section);
-      });
-    }, { threshold: 0.15 });
-
-    if (section) {
-      obs.observe(section);
-      // Trigger immediately if already visible (e.g., dynamic updates without scrolling)
-      var rect = section.getBoundingClientRect();
-      if (rect.top < window.innerHeight && rect.bottom > 0) {
-        setTimeout(triggerAnimations, 50);
-      }
-    }
-  }
-
-  /* ─── 3. Mutations Table ──────────────────────────────── */
-  function mountMutationsTable(analysisData) {
-    var tbody = document.getElementById('mutations-tbody');
-    if (!tbody) return;
-    tbody.innerHTML = '';
-
-    if (analysisData.mutationDetails.length === 0) {
-      var tr = document.createElement('tr');
-      tr.innerHTML = '<td colspan="4" style="text-align:center;opacity:0.5;padding:1.5rem 0;">No mutations detected \u2014 baseline risk profile shown</td>';
-      tbody.appendChild(tr);
-      return;
-    }
-
-    analysisData.mutationDetails.forEach(function (row) {
-      var rc = row.risk === 'HIGH' ? 'high' : row.risk === 'MEDIUM' ? 'mid' : 'low';
-      var geneColor = rc === 'high' ? '#FCA5A5' : rc === 'mid' ? '#FDE68A' : '#6EE7B7';
-      var tr = document.createElement('tr');
-      tr.className = 'row-' + rc;
-      tr.innerHTML =
-        '<td><span class="mt-gene" style="color:' + geneColor + '">' + row.gene + '</span></td>' +
-        '<td><span class="mt-type">' + row.type + '</span></td>' +
-        '<td><span class="mt-badge" style="' + badgeStyle(row.risk) + '">' + row.risk + '</span></td>' +
-        '<td><span class="mt-cancer">' + row.cancer + '</span></td>';
-      tbody.appendChild(tr);
-    });
-  }
-
-  /* ─── 4. Typewriter ───────────────────────────────────── */
-  function runTypewriter(text) {
-    var el = document.getElementById('ai-typewriter');
-    if (!el) return;
-    el.textContent = '';
-    el.classList.remove('ai-error-msg', 'ai-loading-pulse', 'done');
-    var idx = 0;
-    var iv = setInterval(function () {
-      if (idx < text.length) { el.textContent = text.slice(0, idx + 1); idx++; }
-      else { clearInterval(iv); el.classList.add('done'); }
-    }, 18);
-  }
-
-  /* ─── AI card states ─────────────────────────────────── */
-  function showAILoading() {
-    var el = document.getElementById('ai-typewriter');
-    var retryBtn = document.getElementById('ai-retry-btn');
-    if (!el) return;
-    el.classList.remove('ai-error-msg', 'done');
-    el.classList.add('ai-loading-pulse');
-    el.textContent = '\uD83E\uDD16 Generating AI analysis\u2026';
-    if (retryBtn) retryBtn.classList.add('hidden');
-  }
-
-  function showAIError(code) {
-    var el = document.getElementById('ai-typewriter');
-    var retryBtn = document.getElementById('ai-retry-btn');
-    if (!el) return;
-    el.classList.remove('ai-loading-pulse', 'done');
-    el.classList.add('ai-error-msg');
-    if (code === 'RATE_LIMIT') el.textContent = 'AI explanation unavailable due to rate limit. Try again in 1 minute.';
-    else if (code === 'INVALID_KEY') el.textContent = 'Invalid API key. Please check your Gemini API key.';
-    else el.textContent = 'Unable to connect. Check your internet connection.';
-
-    if (retryBtn) retryBtn.classList.remove('hidden');
-  }
-
-  /* ─── 5. Orchestrate AI fetch ────────────────────────── */
-  async function mountAIExplanation(analysisData) {
-    showAILoading();
-    var mutations = analysisData.mutations;
-
-    try {
-      var text = await callGeminiAI(mutations);
-      runTypewriter(text);
-    } catch (err) {
-      console.warn("Gemini API failed, using fallback explanation. Error:", err);
-      var fallbackText = "";
-      if (mutations.includes('BRCA1')) {
-        fallbackText = "The BRCA1 mutation is a tumor suppressor gene mutation that significantly increases the risk of breast and ovarian cancer. Individuals with this mutation have up to a 75% lifetime risk of developing breast cancer. However, early detection through regular screenings dramatically improves outcomes. We recommend scheduling a consultation with a genetic counselor as a positive first step.";
-      } else if (mutations.includes('TP53')) {
-        fallbackText = "The TP53 mutation affects the body's primary tumor suppressor gene, increasing risk across multiple cancer types including lung, colon, and blood cancers. Regular screening and a healthy lifestyle can significantly reduce your overall risk. Consult an oncologist for a personalized surveillance plan.";
-      } else if (mutations.includes('KRAS')) {
-        fallbackText = "The KRAS mutation is commonly associated with lung and colon cancer development. While this mutation raises your risk profile, modern targeted therapies have made KRAS-related cancers increasingly treatable. Early screening is your best defense.";
-      } else if (mutations.length === 0) {
-        fallbackText = "No high-risk mutations were detected in your sample. Your baseline cancer risk profile is within normal ranges. Continue maintaining a healthy lifestyle with regular checkups as prevention is always the best medicine.";
-      } else {
-        // Generic fallback for other mutations
-        fallbackText = "Genetic markers associated with increased cancer risk were detected. Early detection and regular screening are your best tools for prevention. We recommend consulting with a healthcare professional or genetic counselor for a personalized surveillance plan.";
-      }
-      runTypewriter(fallbackText);
-    }
-  }
-
-  /* ─── 6. PDF Download ────────────────────────────────── */
+  /* ─── PDF Download ────────────────────────────────── */
   function setupPDFDownload() {
     var btn = document.getElementById('download-pdf-btn');
     if (!btn) return;
@@ -1305,7 +1039,7 @@ gsap.registerPlugin(ScrollTrigger);
     });
   }
 
-  /* ─── 7. GSAP Scroll Animations ─────────────────────── */
+  /* ─── GSAP Scroll Animations ─────────────────────── */
   function mountGSAPAnimations() {
     if (typeof gsap === 'undefined') return;
     gsap.from('#dashboard-summary', {
@@ -1326,15 +1060,39 @@ gsap.registerPlugin(ScrollTrigger);
     });
   }
 
-  /* ─── Boot ───────────────────────────────────────────── */
-  function boot() {
+  /* ─── Dashboard Orchestrator ─────────────────────────── */
+  async function runDashboardUpdate() {
     var analysisData = detectMutations();
+    showAILoading();
+    var mutations = analysisData.mutations;
+
+    try {
+      var result = await fetchPredictAPI(mutations);
+      analysisData.overallRisk = result.risk_level;
+      analysisData.explanation = result.explanation;
+      analysisData.riskScores = [
+        { name: 'Breast', pct: result.scores.breast },
+        { name: 'Lung', pct: result.scores.lung },
+        { name: 'Colon', pct: result.scores.colon },
+        { name: 'Ovarian', pct: result.scores.ovarian },
+        { name: 'Blood', pct: result.scores.blood }
+      ];
+    } catch (err) {
+      console.warn("Local ML API failed, using fallback calculation. Error:", err);
+      // fallback uses locally determined analysisData.overallRisk and analysisData.riskScores
+      analysisData.explanation = getFallbackExplanation(mutations);
+      var el = document.getElementById('ai-typewriter');
+      if (el) {
+        el.classList.remove('ai-error-msg', 'ai-loading-pulse');
+        var retryBtn = document.getElementById('ai-retry-btn');
+        if (retryBtn) retryBtn.classList.add('hidden');
+      }
+    }
+
     updateSummaryCard(analysisData);
     mountRings(analysisData);
     mountMutationsTable(analysisData);
-    mountAIExplanation(analysisData);  // async — calls Gemini API
-    setupPDFDownload();
-    mountGSAPAnimations();
+    runTypewriter(analysisData.explanation);
 
     setTimeout(function () {
       var scoresObj = { breast: 12, lung: 11, colon: 10, ovarian: 13, blood: 10 };
@@ -1345,40 +1103,26 @@ gsap.registerPlugin(ScrollTrigger);
       }
       drawRadar(scoresObj);
     }, 300);
+  }
+
+  /* ─── Boot ───────────────────────────────────────────── */
+  function boot() {
+    runDashboardUpdate().then(() => {
+      setupPDFDownload();
+      mountGSAPAnimations();
+    });
 
     var retryBtn = document.getElementById('ai-retry-btn');
     if (retryBtn && !retryBtn.hasAttribute('data-bound')) {
       retryBtn.addEventListener('click', function () {
-        mountAIExplanation(detectMutations());
+        runDashboardUpdate();
       });
       retryBtn.setAttribute('data-bound', 'true');
     }
   }
 
   window.updateDashboard = function () {
-    var analysisData = detectMutations();
-    updateSummaryCard(analysisData);
-    mountRings(analysisData);
-    mountMutationsTable(analysisData);
-    mountAIExplanation(analysisData);
-
-    setTimeout(function () {
-      var scoresObj = { breast: 12, lung: 11, colon: 10, ovarian: 13, blood: 10 };
-      if (analysisData && analysisData.riskScores) {
-        analysisData.riskScores.forEach(function (s) {
-          scoresObj[s.name.toLowerCase()] = s.pct;
-        });
-      }
-      drawRadar(scoresObj);
-    }, 300);
-
-    var retryBtn = document.getElementById('ai-retry-btn');
-    if (retryBtn && !retryBtn.hasAttribute('data-bound')) {
-      retryBtn.addEventListener('click', function () {
-        mountAIExplanation(detectMutations());
-      });
-      retryBtn.setAttribute('data-bound', 'true');
-    }
+    runDashboardUpdate();
   };
 
   if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', boot); }

@@ -2335,6 +2335,79 @@ body {
   margin-bottom: 1.75rem;
 }
 
+/* ── Model Info Card ───────────────────────────────────────── */
+.model-info-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.model-info-card {
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(0, 180, 216, 0.22);
+  border-radius: 20px;
+  padding: 1.5rem 2rem;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 0 60px rgba(0, 180, 216, 0.07), 0 8px 32px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 900px;
+}
+
+.model-info-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  padding-bottom: 0.8rem;
+}
+
+.model-info-icon {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 0 8px var(--teal));
+}
+
+.model-info-title {
+  font-family: var(--font-accent);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0.02em;
+}
+
+.model-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1.5rem;
+}
+
+.model-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.model-stat-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.model-stat-value {
+  font-family: var(--font-accent);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--teal);
+  text-shadow: 0 0 8px rgba(0, 180, 216, 0.4);
+}
+
 /* ── Dash Card Base ────────────────────────────────────────── */
 .dash-card {
   position: relative;

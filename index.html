@@ -486,7 +486,7 @@
         <div class="ai-content">
           <div class="ai-gemini-badge">
             <span class="gemini-dot"></span>
-            <span>Gemini AI Analysis</span>
+            <span>🧠 GeneRisk Random Forest Model</span>
           </div>
           <p class="ai-typewriter-text" id="ai-typewriter" aria-live="polite"></p>
           <button id="ai-retry-btn" class="ai-retry-btn hidden" type="button">Retry AI Explanation 🔄</button>
@@ -540,6 +540,38 @@
 
       </div>
     </div><!-- /.recommendations-section -->
+
+    <!-- ── Model Info Card ────────────────────────────── -->
+    <div class="model-info-section">
+      <div class="model-info-card" id="model-info-card">
+        <div class="model-info-header">
+          <span class="model-info-icon">🧠</span>
+          <h3 class="model-info-title">Model Specifications</h3>
+        </div>
+        <div class="model-info-grid">
+          <div class="model-stat">
+            <span class="model-stat-label">Algorithm</span>
+            <span class="model-stat-value">Random Forest Classifier</span>
+          </div>
+          <div class="model-stat">
+            <span class="model-stat-label">Accuracy</span>
+            <span class="model-stat-value">97.37%</span>
+          </div>
+          <div class="model-stat">
+            <span class="model-stat-label">ROC-AUC</span>
+            <span class="model-stat-value">0.9970</span>
+          </div>
+          <div class="model-stat">
+            <span class="model-stat-label">Dataset</span>
+            <span class="model-stat-value">Wisconsin Breast Cancer (UCI)</span>
+          </div>
+          <div class="model-stat">
+            <span class="model-stat-label">Training Samples</span>
+            <span class="model-stat-value">455</span>
+          </div>
+        </div>
+      </div>
+    </div><!-- /.model-info-section -->
 
   </section><!-- /#results -->
 
