@@ -1068,14 +1068,16 @@ gsap.registerPlugin(ScrollTrigger);
 
     try {
       var result = await fetchPredictAPI(mutations);
+      console.log('ML API Result:', result);
+      
       analysisData.overallRisk = result.risk_level;
       analysisData.explanation = result.explanation;
       analysisData.riskScores = [
-        { name: 'Breast', pct: result.scores.breast },
-        { name: 'Lung', pct: result.scores.lung },
-        { name: 'Colon', pct: result.scores.colon },
-        { name: 'Ovarian', pct: result.scores.ovarian },
-        { name: 'Blood', pct: result.scores.blood }
+        { name: 'Breast', pct: parseInt(result.scores.breast) || 0 },
+        { name: 'Lung', pct: parseInt(result.scores.lung) || 0 },
+        { name: 'Colon', pct: parseInt(result.scores.colon) || 0 },
+        { name: 'Ovarian', pct: parseInt(result.scores.ovarian) || 0 },
+        { name: 'Blood', pct: parseInt(result.scores.blood) || 0 }
       ];
     } catch (err) {
       console.warn("Local ML API failed, using fallback calculation. Error:", err);
@@ -1095,14 +1097,20 @@ gsap.registerPlugin(ScrollTrigger);
     runTypewriter(analysisData.explanation);
 
     setTimeout(function () {
-      var scoresObj = { breast: 12, lung: 11, colon: 10, ovarian: 13, blood: 10 };
+      var scoresObj = { breast: 0, lung: 0, colon: 0, ovarian: 0, blood: 0 };
       if (analysisData && analysisData.riskScores) {
         analysisData.riskScores.forEach(function (s) {
           scoresObj[s.name.toLowerCase()] = s.pct;
         });
       }
       drawRadar(scoresObj);
-    }, 300);
+
+      // Map progress rings and force animation
+      document.querySelectorAll('.ring-fill').forEach(function (circle) {
+        var target = parseFloat(circle.dataset.offset);
+        requestAnimationFrame(function () { circle.style.strokeDashoffset = target; });
+      });
+    }, 150);
   }
 
   /* ─── Boot ───────────────────────────────────────────── */
