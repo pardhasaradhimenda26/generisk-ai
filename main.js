@@ -1114,6 +1114,27 @@ gsap.registerPlugin(ScrollTrigger);
     });
   }
 
+  /* ─── AI card states ─────────────────────────────────── */
+  function showAILoading() {
+    var el = document.getElementById('ai-typewriter');
+    var retryBtn = document.getElementById('ai-retry-btn');
+    if (!el) return;
+    el.classList.remove('ai-error-msg', 'done');
+    el.classList.add('ai-loading-pulse');
+    el.textContent = '\uD83E\uDD16 Generating AI analysis\u2026';
+    if (retryBtn) retryBtn.classList.add('hidden');
+  }
+
+  function showAIError(code) {
+    var el = document.getElementById('ai-typewriter');
+    var retryBtn = document.getElementById('ai-retry-btn');
+    if (!el) return;
+    el.classList.remove('ai-loading-pulse', 'done');
+    el.classList.add('ai-error-msg');
+    el.textContent = 'Unable to connect to ML Model. Please try again.';
+    if (retryBtn) retryBtn.classList.remove('hidden');
+  }
+
   /* ─── Dashboard Orchestrator ─────────────────────────── */
   async function runDashboardUpdate() {
     var analysisData = detectMutations();
