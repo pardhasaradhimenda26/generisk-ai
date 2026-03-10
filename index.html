@@ -12,9 +12,7 @@
     href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧬</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./style.css?v=2" />
 </head>
 
@@ -115,7 +113,7 @@
             <div class="step-icon">🧬</div>
             <div class="step-icon-ring"></div>
           </div>
-          <h3 class="step-title">Input Your DNA</h3>
+          <h3 class="step-title">Paste Your DNA Sequence</h3>
           <p class="step-desc">Paste your raw DNA sequence or manually select known gene mutations like BRCA1, TP53,
             KRAS</p>
           <div class="step-shine"></div>
@@ -152,7 +150,7 @@
             <div class="step-icon">🤖</div>
             <div class="step-icon-ring"></div>
           </div>
-          <h3 class="step-title">AI Analysis</h3>
+          <h3 class="step-title">AI Analyzes Your Genes</h3>
           <p class="step-desc">Our backend cross-references your mutations against ClinVar and COSMIC gene databases
             instantly</p>
           <div class="step-shine"></div>
@@ -189,8 +187,8 @@
             <div class="step-icon">📊</div>
             <div class="step-icon-ring"></div>
           </div>
-          <h3 class="step-title">Risk Report</h3>
-          <p class="step-desc">Receive a detailed cancer probability report with AI-generated explanations per mutation
+          <h3 class="step-title">Get Your Risk Report</h3>
+          <p class="step-desc">Receive a clear breakdown of cancer risk percentages with personalized recommendations
           </p>
           <div class="step-shine"></div>
         </div>
@@ -236,7 +234,17 @@
             </label>
             <span class="char-counter" id="char-counter">0 / 5000</span>
           </div>
+          
+          <div class="sample-sequences-helper">
+            <p>Don't have a DNA sequence? Use our sample sequences below to try it out</p>
+            <div class="sample-buttons">
+              <button class="sample-btn" id="btn-sample-brca1" type="button">Try BRCA1 Sample</button>
+              <button class="sample-btn" id="btn-sample-tp53" type="button">Try TP53 Sample</button>
+              <button class="sample-btn" id="btn-sample-none" type="button">Try No Mutation</button>
+            </div>
+          </div>
           <div class="textarea-wrap">
+    
             <textarea id="dna-textarea" class="dna-textarea" maxlength="5000"
               placeholder="Paste your FASTA format DNA sequence here... e.g. ATGCGTACG..." spellcheck="false"
               autocomplete="off" aria-describedby="dna-error"></textarea>
@@ -299,7 +307,7 @@
           </div>
           <button class="dna-submit-btn" id="dna-submit-btn" type="button" disabled>
             <span class="submit-icon">🔬</span>
-            <span class="submit-text">Analyze Now</span>
+            <span class="submit-text">Analyze My DNA →</span>
             <div class="submit-glow"></div>
           </button>
         </div>
@@ -636,20 +644,37 @@
   </button>
 
   <!-- Footer -->
+  
   <footer class="footer">
     <div class="footer-container">
-      <div class="footer-brand">
-        <span class="logo-icon">🧬</span>
-        <span class="logo-text">GeneRisk AI</span>
+      <div class="footer-col col-brand">
+        <div class="footer-brand">
+          <span class="logo-icon">🧬</span>
+          <span class="logo-text">GeneRisk AI</span>
+        </div>
+        <p class="footer-tagline">Predict. Prevent. Protect.</p>
       </div>
-      <p class="footer-tagline">Predict. Prevent. Protect.</p>
-      <p class="footer-copy">For educational purposes only. Consult a medical professional.</p>
-      <div class="footer-links">
-        <a href="#home">Home</a><span class="footer-sep">|</span><a href="#analyze">Analyze</a><span
-          class="footer-sep">|</span><a href="#how-it-works">How It Works</a>
+      <div class="footer-col col-links">
+        <h4 class="footer-col-title">Quick Links</h4>
+        <div class="footer-links">
+          <a href="#home">Home</a><br>
+          <a href="#analyze">Analyze</a><br>
+          <a href="#results">Results</a>
+        </div>
+      </div>
+      <div class="footer-col col-powered">
+        <h4 class="footer-col-title">Powered by</h4>
+        <p>XGBoost ML Model</p>
+        <p>97.37% Accuracy</p>
+        <p>Wisconsin Cancer Dataset (UCI)</p>
+        <p>Railway Cloud API</p>
       </div>
     </div>
+    <div class="footer-bottom">
+      <p>© 2026 GeneRisk AI. For educational purposes only.</p>
+    </div>
   </footer>
+
 
   <!-- Three.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>

@@ -3339,3 +3339,448 @@ body::before {
     -webkit-overflow-scrolling: touch;
   }
 }
+
+
+/* ========================================
+   RE-DESIGN OVERRIDES (MEDICAL / CLINICAL)
+   ======================================== */
+
+:root {
+  --bg-primary: #F8FAFC;
+  --bg-secondary: #F0F4F8;
+  --bg-card: #FFFFFF;
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --accent-primary: #0EA5E9;
+  --accent-secondary: #06B6D4;
+  --risk-high: #EF4444;
+  --risk-medium: #F59E0B;
+  --risk-low: #22C55E;
+  --border: #E2E8F0;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  
+  --navy: var(--bg-primary); 
+  --white: var(--text-primary);
+  --muted: var(--text-secondary);
+  --teal: var(--accent-primary);
+  --glass-bg: var(--bg-card);
+  --glass-border: var(--border);
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-secondary);
+  font-family: 'Inter', sans-serif !important;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6, .section-title, .hero-title, .dash-card-title, .dashboard-title {
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 700 !important;
+  color: var(--text-primary) !important;
+}
+
+/* Base text overrides */
+p, li, .step-desc, .section-desc, .hero-subtitle, .upload-sub {
+  color: var(--text-secondary) !important;
+}
+
+/* NAVBAR */
+.navbar {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-bottom: 1px solid var(--border) !important;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.08) !important;
+}
+
+.logo-text {
+  color: var(--text-primary) !important;
+  background: none !important;
+  -webkit-text-fill-color: var(--text-primary) !important;
+}
+
+.nav-link {
+  color: var(--text-secondary) !important;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--accent-primary) !important;
+}
+
+.nav-link::after {
+  background: var(--accent-primary) !important;
+  box-shadow: none !important;
+}
+.nav-hamburger span {
+  background: var(--text-primary) !important;
+}
+
+/* HERO SECTION */
+.hero {
+  background: linear-gradient(135deg, #F0F9FF, #E0F2FE) !important;
+}
+
+.hero-title .title-line {
+  color: var(--text-primary) !important;
+  text-shadow: none !important;
+}
+.hero-title .title-line.accent {
+  background: none !important;
+  -webkit-text-fill-color: var(--accent-primary) !important;
+  color: var(--accent-primary) !important;
+  filter: none !important;
+}
+
+.hero-subtitle {
+  color: var(--text-secondary) !important;
+}
+
+.hero-tagline {
+  color: var(--accent-primary) !important;
+  text-shadow: none !important;
+}
+
+.cta-button {
+  background: var(--accent-primary) !important;
+  color: #FFFFFF !important;
+  border-radius: 50px !important;
+  padding: 16px 40px !important;
+  box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 600 !important;
+}
+.cta-glow { display: none !important; }
+.cta-button:hover { 
+  transform: translateY(-2px); 
+  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4) !important; 
+}
+.cta-secondary { color: var(--text-secondary) !important; }
+
+/* STATS */
+.hero-stats {
+  background: #FFFFFF !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: var(--shadow) !important;
+}
+.stat-number, .stat-unit {
+  color: var(--accent-primary) !important;
+  text-shadow: none !important;
+  font-family: 'Inter', sans-serif !important;
+}
+.stat-label {
+  color: var(--text-secondary) !important;
+}
+.stat-divider { background: var(--border) !important; }
+.hero-badge {
+    background: #E0F2FE !important;
+    border: 1px solid #BAE6FD !important;
+    color: var(--accent-primary) !important;
+}
+
+/* CARDS: Clean White with Shadow */
+.dash-card, .dna-card, .step-card, .hiw-card, .recommendations-section .rec-card, .model-info-card, .model-comparison-section .comparison-table-card {
+  background: #FFFFFF !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06) !important;
+  padding: 28px !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  color: var(--text-secondary);
+}
+
+.dash-card-header h3, .dash-card-title {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  color: var(--text-primary) !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+/* HOW IT WORKS overrides */
+.how-it-works::before { display: none !important; }
+.step-number-badge { display: none; }
+.step-glow-border { display: none; }
+.step-shine { display: none; }
+.hiw-card {
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05) !important;
+}
+.hiw-card:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08) !important;
+}
+.step-icon-wrap {
+  background: #E0F2FE !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 50% !important;
+}
+.step-icon-ring { display: none !important; }
+.step-icon { filter: none !important; font-size: 2rem !important; }
+
+/* DNA INPUT Section */
+.dna-input-section {
+  background: var(--bg-primary) !important;
+}
+.dna-section-header .section-title {
+  color: var(--text-primary) !important;
+}
+.dna-tabs {
+  background: #F8FAFC !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+.dna-tab { 
+  color: var(--text-secondary) !important; 
+}
+.dna-tab.active {
+  color: var(--accent-primary) !important;
+  background: #FFFFFF !important;
+  border: 1px solid var(--border) !important;
+  border-bottom: none !important;
+}
+.tab-slider { display: none !important; }
+
+.dna-label { color: var(--text-primary) !important; }
+.dna-textarea {
+  background: #FFFFFF !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-primary) !important;
+  font-family: 'Courier New', monospace !important;
+}
+.dna-textarea:focus {
+  border-color: var(--accent-primary) !important;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2) !important;
+}
+.dna-textarea::placeholder { color: #94A3B8 !important; }
+.submit-text { font-family: 'Inter', sans-serif; font-weight: 600; }
+.dna-submit-btn {
+  background: var(--accent-primary) !important;
+  color: #FFF !important;
+}
+.dna-submit-btn:disabled {
+  background: #CBD5E1 !important;
+  color: #F8FAFC !important;
+}
+.submit-glow { display: none !important; }
+
+/* Sample Helper Buttons (Redesign style) */
+.sample-sequences-helper {
+  margin-bottom: 1rem;
+  background: #F0F9FF;
+  border: 1px solid #BAE6FD;
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+.sample-sequences-helper p {
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  color: #0369A1 !important;
+  font-weight: 500;
+}
+.sample-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.sample-btn {
+  background: #FFFFFF;
+  border: 1px solid #7DD3FC;
+  color: #0369A1;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.sample-btn:hover {
+  background: #E0F2FE;
+  border-color: #38BDF8;
+}
+
+/* RESULTS HEADER CARD */
+.new-summary-card {
+  background: #FFFFFF !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 16px !important;
+  padding: 32px !important;
+  box-shadow: var(--shadow) !important;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+.summary-top {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 24px;
+}
+.summary-date {
+  font-size: 0.95rem;
+  color: var(--text-secondary) !important;
+  margin-top: 6px;
+}
+.summary-meta-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.mutations-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.mutation-pill {
+  background: #E0F2FE !important;
+  color: #0369A1 !important;
+  padding: 4px 14px;
+  border-radius: 99px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.risk-meta-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.risk-badge {
+  padding: 8px 20px !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  font-size: 1.1rem !important;
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid transparent !important;
+}
+.risk-explanation {
+  font-size: 0.9rem;
+  color: var(--text-secondary) !important;
+  margin-top: 8px;
+  max-width: 300px;
+  line-height: 1.5;
+}
+
+/* Plain English Risk Badges */
+.risk-badge.high-badge {
+  background: #FEF2F2 !important;
+  border-color: #FECACA !important;
+  color: #DC2626 !important;
+}
+.risk-badge.low-badge {
+  background: #F0FDF4 !important;
+  border-color: #BBF7D0 !important;
+  color: #16A34A !important;
+}
+.risk-badge.medium-badge {
+  background: #FFFBEB !important;
+  border-color: #FDE68A !important;
+  color: #D97706 !important;
+}
+
+/* RISK RINGS & PROGRESS TRACKS */
+.ring-track { stroke: #F1F5F9 !important; }
+.ring-fill.high { stroke: #EF4444 !important; }
+.ring-fill.medium { stroke: #F59E0B !important; }
+.ring-fill.low { stroke: #22C55E !important; }
+
+.ring-value { 
+  fill: var(--text-primary) !important; 
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 1.2rem;
+}
+.ring-label { 
+  fill: var(--text-secondary) !important; 
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* FOOTER */
+.footer {
+  background: #0F172A !important;
+  color: #94A3B8 !important;
+  padding: 5rem 2rem 3rem !important;
+  text-align: left !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-top: none !important;
+}
+.footer-container {
+  display: grid !important;
+  grid-template-columns: 2fr 1fr 1.5fr !important;
+  gap: 4rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  align-items: start !important;
+}
+.footer-brand {
+    color: #FFFFFF !important;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.footer-brand .logo-text {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    font-size: 1.4rem !important;
+}
+.footer-tagline { 
+  color: #94A3B8 !important; 
+  font-style: normal !important;
+  font-size: 1rem !important;
+  margin-top: 15px;
+}
+.footer-col-title {
+  color: #FFFFFF !important;
+  font-size: 1.1rem !important;
+  margin-bottom: 1.5rem;
+  font-weight: 600 !important;
+}
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.footer-links a {
+  color: #94A3B8 !important;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.2s;
+}
+.footer-links a:hover {
+  color: #0EA5E9 !important;
+}
+.col-powered p {
+  color: #94A3B8 !important;
+  font-size: 0.95rem;
+  margin-bottom: 0.6rem;
+}
+.footer-bottom {
+  border-top: 1px solid #1E293B;
+  margin-top: 4rem;
+  padding-top: 2rem;
+  text-align: center;
+}
+.footer-bottom p {
+  font-size: 0.9rem;
+  color: #64748B !important;
+}
+
+/* MISC Overrides */
+.radar-chart-wrap svg text {
+  fill: var(--text-secondary) !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+#particle-canvas {
+  opacity: 0.3; /* reduction */
+}
+
+/* Animation overrides for medical feel */
+.gsap-fade {
+  transform: translateY(20px);
+}
