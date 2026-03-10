@@ -829,19 +829,27 @@ gsap.registerPlugin(ScrollTrigger);
   let loadingRafId = null;
 
   function createLoadingHelix() {
+    // Remove any previously created canvas to avoid duplicates
+    const existing = document.getElementById('loading-helix-canvas');
+    if (existing) existing.remove();
+
     const canvas = document.createElement('canvas');
     canvas.id = 'loading-helix-canvas';
     canvas.style.cssText = `
       width: 200px;
-      height: 280px;
+      height: 260px;
       display: block;
       margin: 0 auto;
     `;
 
-    // Insert canvas into loading content
-    // replacing .loading-dna-helix element
-    const helixEl = document.querySelector('.loading-dna-helix');
-    if (helixEl) helixEl.replaceWith(canvas);
+    // Insert canvas AFTER .loading-header-text and BEFORE .loading-steps-list
+    const loadingContent = document.querySelector('.loading-content');
+    const stepsList = document.querySelector('.loading-steps-list');
+    if (loadingContent && stepsList) {
+      loadingContent.insertBefore(canvas, stepsList);
+    } else if (loadingContent) {
+      loadingContent.appendChild(canvas);
+    }
 
     const renderer = new THREE.WebGLRenderer({
       canvas, alpha: true, antialias: true
