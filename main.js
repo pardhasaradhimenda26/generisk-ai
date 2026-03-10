@@ -147,6 +147,12 @@ gsap.registerPlugin(ScrollTrigger);
   const dnaGroup = new THREE.Group();
   scene.add(dnaGroup);
 
+  // Animation follow variables
+  let targetX = 0;
+  let targetY = 0;
+  let currentX = 0;
+  let currentY = 0;
+
   // ── Strand spheres + backbone ──────────────────────────────────
   const sphereGeo = new THREE.SphereGeometry(0.18, 12, 12);
 
@@ -293,23 +299,24 @@ gsap.registerPlugin(ScrollTrigger);
   }
   scene.add(particleGroup);
 
-  // ── Scroll Parallax ──────────────────────────────────────────
-  window.addEventListener('scroll', () => {
-    const scrollY = window.scrollY;
-    if (dnaGroup) {
-      dnaGroup.position.y = scrollY * 0.02;
-      dnaGroup.rotation.y = scrollY * 0.0005;
+  // ── Cursor / Touch / Gyro Follow ──────────────────────────────
+  window.addEventListener('mousemove', (e) => {
+    targetX = (e.clientX / window.innerWidth - 0.5) * 8;
+    targetY = -(e.clientY / window.innerHeight - 0.5) * 6;
+  });
+
+  window.addEventListener('touchmove', (e) => {
+    const touch = e.touches[0];
+    targetX = (touch.clientX / window.innerWidth - 0.5) * 8;
+    targetY = -(touch.clientY / window.innerHeight - 0.5) * 6;
+  }, { passive: true });
+
+  window.addEventListener('deviceorientation', (e) => {
+    if (e.gamma !== null && e.beta !== null) {
+      targetX = (e.gamma / 90) * 6;
+      targetY = (e.beta / 180) * 4;
     }
-  });
-
-  // ── Mouse interaction ──────────────────────────────────────────
-  let mouseX = 0;
-  let mouseY = 0;
-
-  document.addEventListener('mousemove', (e) => {
-    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-  });
+  }, { passive: true });
 
   // ── Resize ─────────────────────────────────────────────────────
   window.addEventListener('resize', () => {
@@ -363,13 +370,21 @@ gsap.registerPlugin(ScrollTrigger);
     rafId = requestAnimationFrame(animate);
     frame++;
 
-    // Rotate DNA
-    dnaGroup.rotation.y += 0.003;
-    dnaGroup.position.y = Math.sin(Date.now() * 0.0005) * 20;
+    // Constant smooth circular rotation
+    dnaGroup.rotation.y += 0.004;
 
-    // Subtle mouse tilt
-    dnaGroup.rotation.x += (mouseY * 0.3 - dnaGroup.rotation.x) * 0.02;
-    dnaGroup.rotation.y += (mouseX * 0.5 + frame * 0.004 - dnaGroup.rotation.y) * 0.02;
+    // Smooth lerp toward cursor position
+    currentX += (targetX - currentX) * 0.05;
+    currentY += (targetY - currentY) * 0.05;
+
+    // Apply cursor follow to helix position
+    const time = Date.now() * 0.001;
+    dnaGroup.position.x = currentX;
+    dnaGroup.position.y = Math.sin(time * 0.5) * 3 + currentY;
+
+    // Very subtle tilt toward cursor
+    dnaGroup.rotation.x = currentY * 0.05;
+    dnaGroup.rotation.z = -currentX * 0.02;
 
     // Animate lights
     tealLight.position.x = Math.sin(frame * 0.012) * 8;
