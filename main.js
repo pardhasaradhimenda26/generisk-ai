@@ -3,6 +3,21 @@
    Three.js DNA Helix + Particle System + GSAP Animations
    ============================================================ */
 
+// ── Safe no-op stubs ──────────────────────
+function showAILoading() {
+  const el = document.getElementById('ai-loading');
+  if (el) el.style.display = 'block';
+}
+function hideAILoading() {
+  const el = document.getElementById('ai-loading');
+  if (el) el.style.display = 'none';
+}
+function showAIError(msg) {
+  const el = document.getElementById('ai-explanation-text');
+  if (el) el.textContent = msg || 'Analysis unavailable.';
+}
+// ─────────────────────────────────────────
+
 // ─── GSAP Plugins ─────────────────────────────────────────────
 gsap.registerPlugin(ScrollTrigger);
 
@@ -1303,10 +1318,12 @@ gsap.registerPlugin(ScrollTrigger);
       if (typeof drawRadar === 'function') {
         drawRadar(finalScores);
       }
+      hideAILoading();
 
     } catch (err) {
       console.error("Dashboard update failed:", err);
       showAIError('UNKNOWN');
+      hideAILoading();
     }
   }
 
