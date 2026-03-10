@@ -151,39 +151,39 @@ gsap.registerPlugin(ScrollTrigger);
   const sphereGeo = new THREE.SphereGeometry(0.18, 12, 12);
 
   const matA = new THREE.MeshStandardMaterial({
-    color: STRAND_A_HEX,
-    emissive: STRAND_A_HEX,
-    emissiveIntensity: 0.6,
+    color: 0x00D4FF,
+    emissive: 0x00D4FF,
+    emissiveIntensity: 0.15,
     roughness: 0.2,
     metalness: 0.3,
     transparent: true,
-    opacity: 0.9,
+    opacity: 0.25,
   });
 
   const matB = new THREE.MeshStandardMaterial({
-    color: STRAND_B_HEX,
-    emissive: STRAND_B_HEX,
-    emissiveIntensity: 0.6,
+    color: 0x006699,
+    emissive: 0x006699,
+    emissiveIntensity: 0.15,
     roughness: 0.2,
     metalness: 0.3,
     transparent: true,
-    opacity: 0.9,
+    opacity: 0.20,
   });
 
   const backboneMatA = new THREE.MeshStandardMaterial({
-    color: STRAND_A_HEX,
-    emissive: STRAND_A_HEX,
-    emissiveIntensity: 0.6,
+    color: 0x00D4FF,
+    emissive: 0x00D4FF,
+    emissiveIntensity: 0.15,
     transparent: true,
-    opacity: 0.9,
+    opacity: 0.25,
   });
 
   const backboneMatB = new THREE.MeshStandardMaterial({
-    color: STRAND_B_HEX,
-    emissive: STRAND_B_HEX,
-    emissiveIntensity: 0.6,
+    color: 0x006699,
+    emissive: 0x006699,
+    emissiveIntensity: 0.15,
     transparent: true,
-    opacity: 0.9,
+    opacity: 0.20,
   });
 
   const yCylinderGeo = new THREE.CylinderGeometry(0.045, 0.045, 1, 8);
@@ -229,11 +229,11 @@ gsap.registerPlugin(ScrollTrigger);
 
   // ── Base pair rungs ────────────────────────────────────────────
   const rungMat = new THREE.MeshStandardMaterial({
-    color: 0xFFFFFF,
-    emissive: WHITE_HEX,
-    emissiveIntensity: 0.6,
+    color: 0x00D4FF,
+    emissive: 0x00D4FF,
+    emissiveIntensity: 0.15,
     transparent: true,
-    opacity: 0.9,
+    opacity: 0.3,
   });
 
   for (let i = 0; i < TOTAL_POINTS; i += 3) {
@@ -256,7 +256,7 @@ gsap.registerPlugin(ScrollTrigger);
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
   scene.add(ambientLight);
 
-  const tealLight = new THREE.PointLight(STRAND_A_HEX, 4.0, 40);
+  const tealLight = new THREE.PointLight(0x00D4FF, 1.5, 40);
   tealLight.position.set(5, 5, 5);
   scene.add(tealLight);
 
@@ -269,29 +269,38 @@ gsap.registerPlugin(ScrollTrigger);
   scene.add(whiteLight);
 
   // ── Floating particles ─────────────────────────────────────────
-  const floatGeo = new THREE.BufferGeometry();
-  const floatCount = 180;
-  const floatPos = new Float32Array(floatCount * 3);
-
-  for (let i = 0; i < floatCount; i++) {
-    floatPos[i * 3] = (Math.random() - 0.5) * 30;
-    floatPos[i * 3 + 1] = (Math.random() - 0.5) * 22;
-    floatPos[i * 3 + 2] = (Math.random() - 0.5) * 16 - 6;
-  }
-
-  floatGeo.setAttribute('position', new THREE.BufferAttribute(floatPos, 3));
-
-  const floatMat = new THREE.PointsMaterial({
+  const floatGeo = new THREE.SphereGeometry(0.05, 6, 6);
+  const floatMat = new THREE.MeshBasicMaterial({
     color: 0x00D4FF,
-    size: 0.1,
     transparent: true,
-    opacity: 0.8, // Increased particle brightness/opacity
-    blending: THREE.AdditiveBlending,
-    depthWrite: false,
+    opacity: 0.15,
   });
 
-  const floatPoints = new THREE.Points(floatGeo, floatMat);
-  scene.add(floatPoints);
+  const particlesCount = 200;
+  const particleGroup = new THREE.Group();
+  const particleNodes = [];
+
+  for (let i = 0; i < particlesCount; i++) {
+    const p = new THREE.Mesh(floatGeo, floatMat);
+    p.position.set(
+      (Math.random() - 0.5) * 100,
+      (Math.random() - 0.5) * 200,
+      (Math.random() * 25) - 30 // -30 to -5
+    );
+    p.userData.speed = Math.random() * 0.05 + 0.02;
+    particleGroup.add(p);
+    particleNodes.push(p);
+  }
+  scene.add(particleGroup);
+
+  // ── Scroll Parallax ──────────────────────────────────────────
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    if (dnaGroup) {
+      dnaGroup.position.y = scrollY * 0.02;
+      dnaGroup.rotation.y = scrollY * 0.0005;
+    }
+  });
 
   // ── Mouse interaction ──────────────────────────────────────────
   let mouseX = 0;
@@ -355,8 +364,8 @@ gsap.registerPlugin(ScrollTrigger);
     frame++;
 
     // Rotate DNA
-    dnaGroup.rotation.y += 0.004;
-    dnaGroup.rotation.x += 0.001;
+    dnaGroup.rotation.y += 0.003;
+    dnaGroup.position.y = Math.sin(Date.now() * 0.0005) * 20;
 
     // Subtle mouse tilt
     dnaGroup.rotation.x += (mouseY * 0.3 - dnaGroup.rotation.x) * 0.02;
@@ -368,9 +377,11 @@ gsap.registerPlugin(ScrollTrigger);
     pinkLight.position.x = Math.cos(frame * 0.010) * 8;
     pinkLight.position.y = Math.sin(frame * 0.013) * 5;
 
-    // Float particles rotate slowly
-    floatPoints.rotation.y += 0.001;
-    floatPoints.rotation.x += 0.0005;
+    // Float particles drift upward
+    particleNodes.forEach(p => {
+      p.position.y += p.userData.speed;
+      if (p.position.y > 100) p.position.y = -100;
+    });
 
     renderer.render(scene, camera);
   }

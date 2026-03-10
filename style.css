@@ -4265,3 +4265,130 @@ body {
   backdrop-filter: blur(20px) !important;
   z-index: 100 !important;
 }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   IMMERSIVE DNA WORLD ADDITIONS
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Full page dark vignette */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 30%,
+    rgba(8,12,20,0.6) 70%,
+    rgba(8,12,20,0.9) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Subtle horizontal scan lines */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,212,255,0.012) 2px,
+    rgba(0,212,255,0.012) 4px
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+#dna-canvas {
+  opacity: 0.4 !important;
+}
+
+/* SECTION DEPTH LAYERS */
+.hero {
+  background: transparent !important;
+}
+
+.how-it-works {
+  background: linear-gradient(
+    180deg,
+    rgba(8,12,20,0.0) 0%,
+    rgba(8,12,20,0.3) 50%,
+    rgba(8,12,20,0.0) 100%
+  ) !important;
+}
+
+.dna-input-section {
+  background: linear-gradient(
+    180deg,
+    rgba(0,20,40,0.1) 0%,
+    rgba(0,30,60,0.2) 50%,
+    rgba(0,20,40,0.1) 100%
+  ) !important;
+}
+
+.dashboard-section {
+  background: linear-gradient(
+    180deg,
+    rgba(8,12,20,0.0) 0%,
+    rgba(8,12,20,0.2) 50%,
+    rgba(8,12,20,0.0) 100%
+  ) !important;
+}
+
+/* CARDS (Frosted Glass Depth) */
+.dash-card,
+.dna-card,
+.step-card,
+.rec-card,
+.model-info-card,
+.dashboard-summary-card,
+.comparison-table-card,
+.hero-stats {
+  background: rgba(8, 20, 35, 0.7) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(0,212,255,0.12) !important;
+  box-shadow: 
+    0 4px 24px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(0,212,255,0.08) !important;
+}
+
+.dash-card::before,
+.step-card::before,
+.dna-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0,212,255,0.3),
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* TEXT CLARITY */
+.hero-title {
+  text-shadow: 
+    0 0 40px rgba(0,212,255,0.2),
+    0 2px 4px rgba(0,0,0,0.8) !important;
+}
+
+.hero-subtitle,
+.hero-tagline {
+  text-shadow: 0 2px 8px rgba(0,0,0,0.9) !important;
+}
+
+h1, h2, h3 {
+  text-shadow: 0 2px 12px rgba(0,0,0,0.7) !important;
+}
+
+p, li, span, td, th {
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6) !important;
+}
