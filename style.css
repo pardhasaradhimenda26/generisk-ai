@@ -4202,3 +4202,66 @@ li,
     text-align: center;
   }
 }
+/* ========================================
+   TRANSPARENCY REDESIGN (STEPS 1-5)
+   ======================================== */
+
+/* STEP 1 — CANVAS (Full Page Background) */
+#dna-canvas, #particle-canvas {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  opacity: 0.75 !important;
+}
+
+/* STEP 2 — REMOVE ALL SECTION BACKGROUNDS */
+body {
+  background: #080C14 !important;
+}
+
+.hero,
+.how-it-works,
+.dna-input-section,
+.dashboard-section,
+.section {
+  background: transparent !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* STEP 3 — CARDS KEEP DARK SEMI-TRANSPARENT */
+.dash-card,
+.dna-card,
+.step-card,
+.rec-card,
+.model-info-card,
+.dashboard-summary-card,
+.comparison-table-card,
+.model-comparison-section {
+  background: rgba(13, 31, 45, 0.75) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(0,212,255,0.2) !important;
+}
+
+/* STEP 4 — TEXT STAYS FULLY VISIBLE */
+.hero-content,
+.section-container,
+.section-header,
+.dashboard-grid,
+.steps-row,
+.nav-container {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* STEP 5 — NAVBAR SEMI-TRANSPARENT */
+.navbar {
+  background: rgba(8,12,20,0.85) !important;
+  backdrop-filter: blur(20px) !important;
+  z-index: 100 !important;
+}

@@ -124,7 +124,7 @@ gsap.registerPlugin(ScrollTrigger);
   const canvas = document.getElementById('dna-canvas');
 
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-  renderer.setClearAlpha(1.0);
+  renderer.setClearColor(0x000000, 0);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
@@ -153,7 +153,7 @@ gsap.registerPlugin(ScrollTrigger);
   const matA = new THREE.MeshStandardMaterial({
     color: STRAND_A_HEX,
     emissive: STRAND_A_HEX,
-    emissiveIntensity: 0.4,
+    emissiveIntensity: 0.6,
     roughness: 0.2,
     metalness: 0.3,
     transparent: true,
@@ -163,7 +163,7 @@ gsap.registerPlugin(ScrollTrigger);
   const matB = new THREE.MeshStandardMaterial({
     color: STRAND_B_HEX,
     emissive: STRAND_B_HEX,
-    emissiveIntensity: 0.4,
+    emissiveIntensity: 0.6,
     roughness: 0.2,
     metalness: 0.3,
     transparent: true,
@@ -173,7 +173,7 @@ gsap.registerPlugin(ScrollTrigger);
   const backboneMatA = new THREE.MeshStandardMaterial({
     color: STRAND_A_HEX,
     emissive: STRAND_A_HEX,
-    emissiveIntensity: 0.2,
+    emissiveIntensity: 0.6,
     transparent: true,
     opacity: 0.9,
   });
@@ -181,7 +181,7 @@ gsap.registerPlugin(ScrollTrigger);
   const backboneMatB = new THREE.MeshStandardMaterial({
     color: STRAND_B_HEX,
     emissive: STRAND_B_HEX,
-    emissiveIntensity: 0.2,
+    emissiveIntensity: 0.6,
     transparent: true,
     opacity: 0.9,
   });
@@ -231,7 +231,7 @@ gsap.registerPlugin(ScrollTrigger);
   const rungMat = new THREE.MeshStandardMaterial({
     color: 0xFFFFFF,
     emissive: WHITE_HEX,
-    emissiveIntensity: 0.25,
+    emissiveIntensity: 0.6,
     transparent: true,
     opacity: 0.9,
   });
@@ -256,11 +256,11 @@ gsap.registerPlugin(ScrollTrigger);
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
   scene.add(ambientLight);
 
-  const tealLight = new THREE.PointLight(STRAND_A_HEX, 3.0, 40);
+  const tealLight = new THREE.PointLight(STRAND_A_HEX, 4.0, 40);
   tealLight.position.set(5, 5, 5);
   scene.add(tealLight);
 
-  const pinkLight = new THREE.PointLight(STRAND_B_HEX, 3.0, 40);
+  const pinkLight = new THREE.PointLight(STRAND_B_HEX, 4.0, 40);
   pinkLight.position.set(-5, -5, 5);
   scene.add(pinkLight);
 

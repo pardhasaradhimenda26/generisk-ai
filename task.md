@@ -23,5 +23,5 @@
 - [x] Part 5: Final Polish
     - [x] Update Footer
     - [x] Final verification and testing
-- [/] Deployment
-    - [/] Push changes to GitHub
+- [x] Deployment
+    - [x] Push changes to GitHub
