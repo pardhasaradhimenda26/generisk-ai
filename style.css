@@ -389,23 +389,27 @@ canvas {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.45rem 1.1rem;
-  background: var(--teal-dim);
-  border: 1px solid rgba(0, 180, 216, 0.3);
-  border-radius: 99px;
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  color: var(--teal);
+  background: rgba(0, 212, 255, 0.08) !important;
+  border: 1px solid rgba(0, 212, 255, 0.25) !important;
+  border-radius: 100px !important;
+  padding: 8px 20px !important;
+  color: #00D4FF !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: 2px !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow:
+    0 0 20px rgba(0, 212, 255, 0.1),
+    inset 0 1px 0 rgba(0, 212, 255, 0.1) !important;
   text-transform: uppercase;
 }
 
 .badge-dot {
   width: 7px;
   height: 7px;
-  background: var(--teal);
   border-radius: 50%;
-  box-shadow: 0 0 10px var(--teal);
+  background: #00D4FF !important;
+  box-shadow: 0 0 6px rgba(0, 212, 255, 0.8) !important;
   animation: pulse 2s ease-in-out infinite;
 }
 
@@ -3578,9 +3582,18 @@ li,
 }
 
 .hero-badge {
-  background: #E0F2FE !important;
-  border: 1px solid #BAE6FD !important;
-  color: var(--accent-primary) !important;
+  background: rgba(0, 212, 255, 0.08) !important;
+  border: 1px solid rgba(0, 212, 255, 0.25) !important;
+  color: #00D4FF !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow:
+    0 0 20px rgba(0, 212, 255, 0.1),
+    inset 0 1px 0 rgba(0, 212, 255, 0.1) !important;
+}
+
+.badge-dot {
+  background: #00D4FF !important;
+  box-shadow: 0 0 6px rgba(0, 212, 255, 0.8) !important;
 }
 
 /* CARDS: Clean White with Shadow */
