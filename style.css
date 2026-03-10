@@ -3534,7 +3534,7 @@ p, li, .step-desc, .section-desc, .hero-subtitle, .upload-sub {
 
 /* NAVBAR */
 .navbar {
-  background: rgba(255, 255, 255, 0.95) !important;
+  background: rgba(8, 12, 20, 0.95) !important;
   backdrop-filter: blur(20px) !important;
   -webkit-backdrop-filter: blur(20px) !important;
   border-bottom: 1px solid var(--border) !important;
@@ -3606,7 +3606,7 @@ p, li, .step-desc, .section-desc, .hero-subtitle, .upload-sub {
 
 /* STATS */
 .hero-stats {
-  background: #FFFFFF !important;
+  background: var(--bg-card) !important;
   border: 1px solid var(--border) !important;
   box-shadow: var(--shadow) !important;
 }
@@ -3627,7 +3627,7 @@ p, li, .step-desc, .section-desc, .hero-subtitle, .upload-sub {
 
 /* CARDS: Clean White with Shadow */
 .dash-card, .dna-card, .step-card, .hiw-card, .recommendations-section .rec-card, .model-info-card, .model-comparison-section .comparison-table-card {
-  background: #FFFFFF !important;
+  background: var(--bg-card) !important;
   border: 1px solid var(--border) !important;
   border-radius: 16px !important;
   box-shadow: 0 4px 24px rgba(0,0,0,0.06) !important;
@@ -3681,7 +3681,7 @@ p, li, .step-desc, .section-desc, .hero-subtitle, .upload-sub {
 }
 .dna-tab.active {
   color: var(--accent-primary) !important;
-  background: #FFFFFF !important;
+  background: var(--bg-card) !important;
   border: 1px solid var(--border) !important;
   border-bottom: none !important;
 }
@@ -3689,7 +3689,7 @@ p, li, .step-desc, .section-desc, .hero-subtitle, .upload-sub {
 
 .dna-label { color: var(--text-primary) !important; }
 .dna-textarea {
-  background: #FFFFFF !important;
+  background: var(--bg-card) !important;
   border: 1px solid var(--border) !important;
   color: var(--text-primary) !important;
   font-family: 'Courier New', monospace !important;
@@ -3702,7 +3702,7 @@ p, li, .step-desc, .section-desc, .hero-subtitle, .upload-sub {
 .submit-text { font-family: 'Inter', sans-serif; font-weight: 600; }
 .dna-submit-btn {
   background: var(--accent-primary) !important;
-  color: #FFF !important;
+  color: var(--bg-card) !important;
 }
 .dna-submit-btn:disabled {
   background: #CBD5E1 !important;
@@ -3730,7 +3730,7 @@ p, li, .step-desc, .section-desc, .hero-subtitle, .upload-sub {
   flex-wrap: wrap;
 }
 .sample-btn {
-  background: #FFFFFF;
+  background: var(--bg-card);
   border: 1px solid #7DD3FC;
   color: #0369A1;
   padding: 6px 12px;
@@ -3747,7 +3747,7 @@ p, li, .step-desc, .section-desc, .hero-subtitle, .upload-sub {
 
 /* RESULTS HEADER CARD */
 .new-summary-card {
-  background: #FFFFFF !important;
+  background: var(--bg-card) !important;
   border: 1px solid var(--border) !important;
   border-radius: 16px !important;
   padding: 32px !important;
