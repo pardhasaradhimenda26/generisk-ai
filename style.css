@@ -4370,3 +4370,108 @@ th {
   color: #00D4FF !important;
   border-bottom: 2px solid #00D4FF !important;
 }
+
+/* ========================================
+   FIX 3 — Results Dashboard Text Visibility
+   ======================================== */
+
+/* --- Summary Card --- */
+.dashboard-summary-card {
+  background: rgba(8, 18, 32, 0.85) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(0, 212, 255, 0.15) !important;
+}
+
+.summary-meta-label {
+  color: #94A3B8 !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8) !important;
+}
+
+.summary-meta-value {
+  color: #E2E8F0 !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8) !important;
+}
+
+.dashboard-title {
+  color: #E2E8F0 !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.2) !important;
+}
+
+.summary-divider {
+  background: rgba(0, 212, 255, 0.15) !important;
+  width: 1px !important;
+}
+
+.download-btn {
+  color: #00D4FF !important;
+  border: 1px solid rgba(0, 212, 255, 0.4) !important;
+  background: rgba(0, 212, 255, 0.08) !important;
+}
+
+.download-btn:hover {
+  background: rgba(0, 212, 255, 0.15) !important;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.3) !important;
+}
+
+/* --- Global Dashboard Card Text --- */
+.dash-card-title {
+  color: #E2E8F0 !important;
+  font-weight: 600 !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6) !important;
+}
+
+.dash-card {
+  background: rgba(8, 18, 32, 0.80) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+
+/* Fix all text inside dash cards */
+.dash-card p,
+.dash-card span,
+.dash-card td,
+.dash-card th,
+.dash-card li {
+  color: #CBD5E1 !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* --- Mutations Table --- */
+.mutations-table th {
+  color: #94A3B8 !important;
+  font-size: 11px !important;
+  letter-spacing: 1px !important;
+  border-bottom: 1px solid rgba(0, 212, 255, 0.1) !important;
+}
+
+.mutations-table td {
+  color: #E2E8F0 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
+}
+
+/* --- AI Typewriter --- */
+.ai-typewriter-text {
+  color: #CBD5E1 !important;
+  line-height: 1.7 !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* --- Model Stats --- */
+.model-stat-label {
+  color: #64748B !important;
+  font-size: 11px !important;
+}
+
+.model-stat-value {
+  color: #00D4FF !important;
+  font-weight: 600 !important;
+}
