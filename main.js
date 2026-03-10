@@ -998,26 +998,19 @@ gsap.registerPlugin(ScrollTrigger);
   }
 
   /* ─── 5. Orchestrate Data Fetch ────────────────────────── */
-  const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-    ? 'http://localhost:5000/predict' 
-    : null;
+  const API_URL = 'https://web-production-0dc1c.up.railway.app/predict';
 
   async function fetchPredictAPI(mutations) {
-    if (API_URL) {
-      try {
-        var response = await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ mutations: mutations })
-        });
-        if (!response.ok) throw new Error('API_ERROR');
-        return await response.json();
-      } catch (err) {
-        console.warn("Local ML API fetch failed, falling back to mock data.", err);
-        return getFallbackData(mutations);
-      }
-    } else {
-      console.log('Running on remote host, using fallback ML data.');
+    try {
+      var response = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mutations: mutations })
+      });
+      if (!response.ok) throw new Error('API_ERROR');
+      return await response.json();
+    } catch (err) {
+      console.warn("ML API fetch failed, falling back to mock data.", err);
       return getFallbackData(mutations);
     }
   }
