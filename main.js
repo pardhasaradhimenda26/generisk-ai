@@ -828,6 +828,125 @@ gsap.registerPlugin(ScrollTrigger);
   let loadingTimers = [];
   let loadingRafId = null;
 
+  function createLoadingHelix() {
+    const canvas = document.createElement('canvas');
+    canvas.id = 'loading-helix-canvas';
+    canvas.style.cssText = `
+      width: 200px;
+      height: 280px;
+      display: block;
+      margin: 0 auto;
+    `;
+
+    // Insert canvas into loading content
+    // replacing .loading-dna-helix element
+    const helixEl = document.querySelector('.loading-dna-helix');
+    if (helixEl) helixEl.replaceWith(canvas);
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas, alpha: true, antialias: true
+    });
+    renderer.setSize(200, 280);
+    renderer.setClearColor(0x000000, 0);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, 200 / 280, 0.1, 100);
+    camera.position.z = 8;
+
+    // Build mini DNA double helix
+    const helixGroup = new THREE.Group();
+    const strandPoints1 = [];
+    const strandPoints2 = [];
+    const numPoints = 40;
+    const height = 6;
+    const radius = 1.2;
+
+    for (let i = 0; i < numPoints; i++) {
+      const t = (i / numPoints) * Math.PI * 4;
+      const y = (i / numPoints) * height - height / 2;
+      strandPoints1.push(new THREE.Vector3(
+        Math.cos(t) * radius, y, Math.sin(t) * radius
+      ));
+      strandPoints2.push(new THREE.Vector3(
+        Math.cos(t + Math.PI) * radius, y,
+        Math.sin(t + Math.PI) * radius
+      ));
+    }
+
+    // Strand 1 — teal tube
+    const curve1 = new THREE.CatmullRomCurve3(strandPoints1);
+    const tube1 = new THREE.TubeGeometry(curve1, 80, 0.06, 8, false);
+    const mat1 = new THREE.MeshPhongMaterial({
+      color: 0x00D4FF, emissive: 0x003355,
+      emissiveIntensity: 0.5, transparent: true, opacity: 0.9
+    });
+    helixGroup.add(new THREE.Mesh(tube1, mat1));
+
+    // Strand 2 — purple tube
+    const curve2 = new THREE.CatmullRomCurve3(strandPoints2);
+    const tube2 = new THREE.TubeGeometry(curve2, 80, 0.06, 8, false);
+    const mat2 = new THREE.MeshPhongMaterial({
+      color: 0xAA44FF, emissive: 0x220033,
+      emissiveIntensity: 0.5, transparent: true, opacity: 0.9
+    });
+    helixGroup.add(new THREE.Mesh(tube2, mat2));
+
+    // Base pair rungs connecting strands
+    for (let i = 0; i < numPoints; i += 3) {
+      const p1 = strandPoints1[i];
+      const p2 = strandPoints2[i];
+      const mid = new THREE.Vector3().addVectors(p1, p2).multiplyScalar(0.5);
+      const dist = p1.distanceTo(p2);
+
+      const rungGeo = new THREE.CylinderGeometry(0.03, 0.03, dist, 6);
+      const rungMat = new THREE.MeshPhongMaterial({
+        color: 0x00FFAA, emissive: 0x003322,
+        transparent: true, opacity: 0.6
+      });
+      const rung = new THREE.Mesh(rungGeo, rungMat);
+      rung.position.copy(mid);
+      rung.lookAt(p2);
+      rung.rotateX(Math.PI / 2);
+      helixGroup.add(rung);
+
+      // Glowing node spheres at connection points
+      const nodeGeo = new THREE.SphereGeometry(0.12, 8, 8);
+      const nodeMat = new THREE.MeshPhongMaterial({
+        color: 0x00D4FF, emissive: 0x00D4FF,
+        emissiveIntensity: 0.8, transparent: true, opacity: 0.9
+      });
+      const node1 = new THREE.Mesh(nodeGeo, nodeMat.clone());
+      const node2 = new THREE.Mesh(nodeGeo, nodeMat.clone());
+      node1.position.copy(p1);
+      node2.position.copy(p2);
+      helixGroup.add(node1);
+      helixGroup.add(node2);
+    }
+
+    scene.add(helixGroup);
+
+    // Lights
+    scene.add(new THREE.AmbientLight(0x112244, 1.5));
+    const pLight = new THREE.PointLight(0x00D4FF, 3, 20);
+    pLight.position.set(3, 2, 3);
+    scene.add(pLight);
+    const pLight2 = new THREE.PointLight(0xAA44FF, 2, 20);
+    pLight2.position.set(-3, -2, 3);
+    scene.add(pLight2);
+
+    // Animate loading helix
+    function animateLoadingHelix() {
+      if (!document.getElementById('loading-overlay') ||
+        document.getElementById('loading-overlay')
+          .style.display === 'none') return;
+      requestAnimationFrame(animateLoadingHelix);
+      helixGroup.rotation.y += 0.02;
+      helixGroup.position.y = Math.sin(Date.now() * 0.001) * 0.3;
+      renderer.render(scene, camera);
+    }
+    animateLoadingHelix();
+  }
+
   function showLoading() {
     // Capture current input data for results page
     window.generiskAnalysisData = {
@@ -838,7 +957,11 @@ gsap.registerPlugin(ScrollTrigger);
 
     // Reset overlay state
     const stepEls = [0, 1, 2, 3, 4].map(i => document.getElementById('ls-step-' + i));
-    stepEls.forEach(el => { if (el) el.classList.remove('visible'); });
+    stepEls.forEach(el => {
+      if (el) {
+        el.classList.remove('visible', 'done');
+      }
+    });
     loadingBarFill.style.width = '0%';
     const pctEl = document.getElementById('loading-bar-pct');
     if (pctEl) pctEl.textContent = '0%';
@@ -847,6 +970,9 @@ gsap.registerPlugin(ScrollTrigger);
     loadingOverlay.classList.add('visible');
     loadingOverlay.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+
+    // Initialize 3D Helix
+    createLoadingHelix();
 
     // Clear any previous timers
     loadingTimers.forEach(t => clearTimeout(t));
@@ -858,6 +984,10 @@ gsap.registerPlugin(ScrollTrigger);
       if (!el) return;
       const t = setTimeout(() => {
         el.classList.add('visible');
+        // Add a slight delay for the 'done' class to trigger the checkmark animation
+        setTimeout(() => {
+          el.classList.add('done');
+        }, 600);
       }, 200 + i * STEP_INTERVAL);
       loadingTimers.push(t);
     });
@@ -876,7 +1006,7 @@ gsap.registerPlugin(ScrollTrigger);
         loadingRafId = requestAnimationFrame(animateBar);
       } else {
         // All done — fade out and go to results
-        setTimeout(hideLoading, 300);
+        setTimeout(hideLoading, 600);
       }
     }
     loadingRafId = requestAnimationFrame(animateBar);

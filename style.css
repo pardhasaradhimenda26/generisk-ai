@@ -1,4 +1,4 @@
-/* ========================================
+﻿/* ========================================
    GeneRisk AI — Global Styles
    ======================================== */
 :root {
@@ -1770,6 +1770,14 @@ canvas {
    Loading Overlay
    ======================================== */
 
+/* ═══════════════════════════════════════════
+   LOADING OVERLAY REDESIGN
+   ═══════════════════════════════════════════ */
+
+/* ===========================================
+   LOADING OVERLAY REDESIGN
+   =========================================== */
+
 .loading-overlay {
   position: fixed;
   inset: 0;
@@ -1777,7 +1785,8 @@ canvas {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #0A1628;
+  background: rgba(8,12,20,0.96) !important;
+  backdrop-filter: blur(20px) !important;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1788,278 +1797,57 @@ canvas {
   pointer-events: all;
 }
 
-.loading-overlay.fade-out {
-  opacity: 0;
-  transition: opacity 0.6s ease;
-}
-
 .loading-content {
+  background: rgba(13,31,45,0.6);
+  border: 1px solid rgba(0,212,255,0.15);
+  border-radius: 24px;
+  padding: 48px;
+  box-shadow:
+    0 0 60px rgba(0,212,255,0.08),
+    inset 0 1px 0 rgba(0,212,255,0.1);
+  backdrop-filter: blur(16px);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.6rem;
   text-align: center;
-  padding: 2rem 1.5rem;
-  max-width: 520px;
-  width: 100%;
+  width: min(520px, 92vw);
 }
 
-/* ── Header text ── */
 .loading-header-text {
-  font-family: var(--font-accent);
-  font-size: clamp(1rem, 4vw, 1.45rem);
-  font-weight: 700;
-  color: var(--white);
-  letter-spacing: -0.02em;
-  text-shadow: 0 0 30px rgba(0, 180, 216, 0.4);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #E2E8F0;
+  text-align: center;
+  letter-spacing: 1px;
+  margin-bottom: 32px;
+  text-shadow: 0 0 20px rgba(0,212,255,0.3);
 }
 
-/* ── CSS DNA Double Helix ── */
-.loading-dna-helix {
-  position: relative;
-  width: 110px;
-  height: 190px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+/* 3D DNA Helix Canvas */
+#loading-helix-canvas {
+  filter: drop-shadow(0 0 20px rgba(0,212,255,0.3));
+  margin-bottom: 20px;
 }
 
-.helix-glow {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(28px);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.glow-teal {
-  width: 70px;
-  height: 70px;
-  background: rgba(0, 180, 216, 0.45);
-  top: 28%;
-  left: 50%;
-  transform: translateX(-50%);
-  animation: helix-glow-pulse 2s ease-in-out infinite;
-}
-
-.glow-pink {
-  width: 55px;
-  height: 55px;
-  background: rgba(255, 107, 157, 0.35);
-  bottom: 22%;
-  left: 50%;
-  transform: translateX(-50%);
-  animation: helix-glow-pulse 2s ease-in-out infinite 1s;
-}
-
-@keyframes helix-glow-pulse {
-
-  0%,
-  100% {
-    opacity: 0.6;
-    transform: translateX(-50%) scale(1);
-  }
-
-  50% {
-    opacity: 1;
-    transform: translateX(-50%) scale(1.4);
-  }
-}
-
-.helix-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  animation: helix-rotate 2.8s linear infinite;
-  transform-style: preserve-3d;
-  z-index: 1;
-}
-
-@keyframes helix-rotate {
-  from {
-    transform: rotateY(0deg);
-  }
-
-  to {
-    transform: rotateY(360deg);
-  }
-}
-
-.helix-strand {
-  position: absolute;
-  inset: 0;
-}
-
-.helix-node {
-  position: absolute;
-  left: 50%;
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  transform: translateX(-50%);
-}
-
-/* Strand A — teal */
-.strand-a .helix-node {
-  background: radial-gradient(circle at 35% 35%, #48CAE4, #00B4D8);
-  box-shadow: 0 0 10px rgba(0, 180, 216, 0.9), 0 0 20px rgba(0, 180, 216, 0.4);
-}
-
-.strand-a .n1 {
-  top: 3%;
-  margin-left: 32px;
-}
-
-.strand-a .n2 {
-  top: 15%;
-  margin-left: 44px;
-}
-
-.strand-a .n3 {
-  top: 27%;
-  margin-left: 32px;
-}
-
-.strand-a .n4 {
-  top: 39%;
-  margin-left: 0px;
-}
-
-.strand-a .n5 {
-  top: 51%;
-  margin-left: -32px;
-}
-
-.strand-a .n6 {
-  top: 63%;
-  margin-left: -44px;
-}
-
-.strand-a .n7 {
-  top: 75%;
-  margin-left: -32px;
-}
-
-.strand-a .n8 {
-  top: 87%;
-  margin-left: 0px;
-}
-
-/* Strand B — pink, opposite phase */
-.strand-b .helix-node {
-  background: radial-gradient(circle at 35% 35%, #FF9EC4, #FF6B9D);
-  box-shadow: 0 0 10px rgba(255, 107, 157, 0.9), 0 0 20px rgba(255, 107, 157, 0.4);
-}
-
-.strand-b .n1 {
-  top: 3%;
-  margin-left: -32px;
-}
-
-.strand-b .n2 {
-  top: 15%;
-  margin-left: -44px;
-}
-
-.strand-b .n3 {
-  top: 27%;
-  margin-left: -32px;
-}
-
-.strand-b .n4 {
-  top: 39%;
-  margin-left: 0px;
-}
-
-.strand-b .n5 {
-  top: 51%;
-  margin-left: 32px;
-}
-
-.strand-b .n6 {
-  top: 63%;
-  margin-left: 44px;
-}
-
-.strand-b .n7 {
-  top: 75%;
-  margin-left: 32px;
-}
-
-.strand-b .n8 {
-  top: 87%;
-  margin-left: 0px;
-}
-
-/* Base pair rungs */
-.helix-rungs {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.helix-rung {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 84px;
-  height: 2px;
-  background: linear-gradient(90deg,
-      rgba(0, 180, 216, 0.18),
-      rgba(255, 255, 255, 0.3),
-      rgba(255, 107, 157, 0.18));
-  border-radius: 2px;
-}
-
-.helix-rung:nth-child(1) {
-  top: 8%;
-}
-
-.helix-rung:nth-child(2) {
-  top: 20%;
-}
-
-.helix-rung:nth-child(3) {
-  top: 32%;
-}
-
-.helix-rung:nth-child(4) {
-  top: 44%;
-}
-
-.helix-rung:nth-child(5) {
-  top: 56%;
-}
-
-.helix-rung:nth-child(6) {
-  top: 68%;
-}
-
-.helix-rung:nth-child(7) {
-  top: 80%;
-}
-
-.helix-rung:nth-child(8) {
-  top: 92%;
-}
-
-/* ── 5-step progress list ── */
+/* 3D Animated Steps */
 .loading-steps-list {
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
+  gap: 14px;
   align-items: flex-start;
-  width: min(400px, 88vw);
+  width: 100%;
+  max-width: 320px;
 }
 
 .ls-step {
   display: flex;
   align-items: center;
-  gap: 0.7rem;
+  gap: 12px;
   opacity: 0;
-  transform: translateX(-14px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transform: translateX(-10px);
+  transition: all 0.4s ease;
 }
 
 .ls-step.visible {
@@ -2068,73 +1856,143 @@ canvas {
 }
 
 .ls-check {
-  font-size: 1.05rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0,212,255,0.1);
+  border: 2px solid rgba(0,212,255,0.3);
   flex-shrink: 0;
-  filter: drop-shadow(0 0 6px rgba(0, 180, 216, 0.7));
+  font-size: 0;
+  position: relative;
+  transition: all 0.4s ease;
+  transform-style: preserve-3d;
+}
+
+/* Before completion -- spinning ring */
+.ls-check::before {
+  content: '';
+  position: absolute;
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: #00D4FF;
+  animation: spin3d 1s linear infinite;
+}
+
+/* After completion -- glowing checkmark */
+.ls-step.done .ls-check {
+  background: rgba(0,212,255,0.2);
+  border-color: #00D4FF;
+  box-shadow: 
+    0 0 12px rgba(0,212,255,0.6),
+    0 0 24px rgba(0,212,255,0.3),
+    inset 0 0 8px rgba(0,212,255,0.2);
+  animation: checkPop 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+
+.ls-step.done .ls-check::before {
+  content: '\u2713';
+  font-size: 14px;
+  color: #00D4FF;
+  border: none;
+  animation: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(0,212,255,1);
+}
+
+.ls-step.done .ls-text {
+  color: #00D4FF;
+  text-shadow: 0 0 8px rgba(0,212,255,0.4);
+}
+
+@keyframes spin3d {
+  0% { transform: rotate(0deg) rotateY(0deg); }
+  100% { transform: rotate(360deg) rotateY(360deg); }
+}
+
+@keyframes checkPop {
+  0% { transform: scale(0) rotateY(180deg); }
+  60% { transform: scale(1.3) rotateY(20deg); }
+  100% { transform: scale(1) rotateY(0deg); }
 }
 
 .ls-text {
-  font-size: 0.9rem;
+  color: #94A3B8;
+  font-size: 15px;
   font-weight: 500;
-  color: var(--white);
-  letter-spacing: 0.01em;
-  text-align: left;
+  transition: all 0.3s ease;
 }
 
-/* ── Progress bar ── */
+/* 3D Progress Bar */
 .loading-bar-wrap {
-  position: relative;
-  width: min(420px, 88vw);
-  height: 6px;
-  background: rgba(255, 255, 255, 0.07);
-  border-radius: 99px;
+  width: 320px;
+  height: 8px;
+  background: rgba(0,212,255,0.08);
+  border-radius: 100px;
+  border: 1px solid rgba(0,212,255,0.2);
   overflow: visible;
+  position: relative;
+  box-shadow: 
+    0 0 20px rgba(0,212,255,0.1),
+    inset 0 1px 3px rgba(0,0,0,0.5);
+  transform: perspective(200px) rotateX(5deg);
+  margin-top: 20px;
 }
 
 .loading-bar-fill {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, #0096C7, #00B4D8, #48CAE4);
-  border-radius: 99px;
-  box-shadow: 0 0 14px rgba(0, 180, 216, 0.8), 0 0 30px rgba(0, 180, 216, 0.35);
-  transition: width 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 100px;
+  background: linear-gradient(
+    90deg, 
+    #00AACC, #00D4FF, #00FFAA, #00D4FF
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+  box-shadow:
+    0 0 10px rgba(0,212,255,0.8),
+    0 0 20px rgba(0,212,255,0.4),
+    0 0 40px rgba(0,212,255,0.2);
   position: relative;
-  z-index: 1;
-  overflow: hidden;
+  transition: width 0.3s ease;
 }
 
+/* Glowing orb at progress tip */
 .loading-bar-fill::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: -100%;
-  width: 60%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-  animation: bar-shimmer 1.4s ease-in-out infinite;
+  right: -4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #00D4FF;
+  box-shadow:
+    0 0 8px rgba(0,212,255,1),
+    0 0 16px rgba(0,212,255,0.8),
+    0 0 32px rgba(0,212,255,0.4);
 }
 
-@keyframes bar-shimmer {
-  to {
-    left: 160%;
-  }
-}
-
-.loading-bar-glow {
-  position: absolute;
-  inset: -4px;
-  border-radius: 99px;
-  pointer-events: none;
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 .loading-bar-pct {
-  font-family: var(--font-accent);
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: var(--teal);
-  letter-spacing: 0.06em;
-  margin-top: -0.6rem;
-  text-shadow: 0 0 12px var(--teal-glow);
+  color: #00D4FF;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-shadow: 0 0 8px rgba(0,212,255,0.6);
+  margin-top: 10px;
 }
 
 /* ========================================
@@ -4206,7 +4064,7 @@ li,
    TRANSPARENCY REDESIGN (STEPS 1-5)
    ======================================== */
 
-/* STEP 1 � CANVAS (Full Page Background) */
+/* STEP 1 � CANVAS (Full Page Background) */
 #dna-canvas, #particle-canvas {
   position: fixed !important;
   top: 0 !important;
@@ -4218,7 +4076,7 @@ li,
   opacity: 0.75 !important;
 }
 
-/* STEP 2 � REMOVE ALL SECTION BACKGROUNDS */
+/* STEP 2 � REMOVE ALL SECTION BACKGROUNDS */
 body {
   background: #080C14 !important;
 }
@@ -4233,7 +4091,7 @@ body {
   z-index: 1 !important;
 }
 
-/* STEP 3 � CARDS KEEP DARK SEMI-TRANSPARENT */
+/* STEP 3 � CARDS KEEP DARK SEMI-TRANSPARENT */
 .dash-card,
 .dna-card,
 .step-card,
@@ -4248,7 +4106,7 @@ body {
   border: 1px solid rgba(0,212,255,0.2) !important;
 }
 
-/* STEP 4 � TEXT STAYS FULLY VISIBLE */
+/* STEP 4 � TEXT STAYS FULLY VISIBLE */
 .hero-content,
 .section-container,
 .section-header,
@@ -4259,7 +4117,7 @@ body {
   z-index: 2 !important;
 }
 
-/* STEP 5 � NAVBAR SEMI-TRANSPARENT */
+/* STEP 5 � NAVBAR SEMI-TRANSPARENT */
 .navbar {
   background: rgba(8,12,20,0.85) !important;
   backdrop-filter: blur(20px) !important;
@@ -4392,3 +4250,4 @@ h1, h2, h3 {
 p, li, span, td, th {
   text-shadow: 0 1px 4px rgba(0,0,0,0.6) !important;
 }
+
