@@ -357,7 +357,7 @@ canvas {
   justify-content: center;
   padding: 120px 2rem 80px;
   overflow: hidden;
-  background-color: var(--bg-primary);
+  background: transparent;
   background-image:
     linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
@@ -3673,8 +3673,8 @@ li,
 .recommendations-section .rec-card,
 .model-info-card,
 .model-comparison-section .comparison-table-card {
-  background: var(--bg-card) !important;
-  border: 1px solid var(--border) !important;
+  background: #0D1F2D !important;
+  border: 1px solid rgba(0, 212, 255, 0.15) !important;
   border-radius: 16px !important;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06) !important;
   padding: 28px !important;
@@ -3743,18 +3743,19 @@ li,
 }
 
 .dna-tabs {
-  background: #F8FAFC !important;
-  border-bottom: 1px solid var(--border) !important;
+  background: #080C14 !important;
+  border-bottom: 1px solid rgba(0, 212, 255, 0.15) !important;
 }
 
 .dna-tab {
-  color: var(--text-secondary) !important;
+  background: transparent !important;
+  color: #94A3B8 !important;
 }
 
 .dna-tab.active {
-  color: var(--accent-primary) !important;
-  background: var(--bg-card) !important;
-  border: 1px solid var(--border) !important;
+  background: #0D1F2D !important;
+  color: #00D4FF !important;
+  border: 1px solid rgba(0, 212, 255, 0.15) !important;
   border-bottom: none !important;
 }
 
@@ -3767,9 +3768,9 @@ li,
 }
 
 .dna-textarea {
-  background: var(--bg-card) !important;
-  border: 1px solid var(--border) !important;
-  color: var(--text-primary) !important;
+  background: #080C14 !important;
+  border: 1px solid rgba(0, 212, 255, 0.2) !important;
+  color: #00FF88 !important;
   font-family: 'Courier New', monospace !important;
 }
 
@@ -3801,11 +3802,20 @@ li,
   display: none !important;
 }
 
+.dna-submit-row {
+  background: rgba(0, 212, 255, 0.05) !important;
+  border-top: 1px solid rgba(0, 212, 255, 0.1) !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 2.4rem;
+}
+
 /* Sample Helper Buttons (Redesign style) */
 .sample-sequences-helper {
   margin-bottom: 1rem;
-  background: #F0F9FF;
-  border: 1px solid #BAE6FD;
+  background: rgba(0, 212, 255, 0.05) !important;
+  border: 1px solid rgba(0, 212, 255, 0.15) !important;
   border-radius: 8px;
   padding: 12px 16px;
 }
@@ -3813,7 +3823,7 @@ li,
 .sample-sequences-helper p {
   margin-bottom: 10px;
   font-size: 0.9rem;
-  color: #0369A1 !important;
+  color: #00D4FF !important;
   font-weight: 500;
 }
 
@@ -3824,9 +3834,9 @@ li,
 }
 
 .sample-btn {
-  background: var(--bg-card);
-  border: 1px solid #7DD3FC;
-  color: #0369A1;
+  background: rgba(0, 212, 255, 0.1) !important;
+  border: 1px solid rgba(0, 212, 255, 0.3) !important;
+  color: #00D4FF !important;
   padding: 6px 12px;
   border-radius: 6px;
   font-size: 0.85rem;

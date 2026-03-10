@@ -132,8 +132,8 @@ gsap.registerPlugin(ScrollTrigger);
   camera.position.set(0, 0, 22);
 
   // Colors
-  const STRAND_A_HEX = 0x003344;
-  const STRAND_B_HEX = 0x004455;
+  const STRAND_A_HEX = 0x00D4FF;
+  const STRAND_B_HEX = 0x0099BB;
   const WHITE_HEX = 0xFFFFFF;
 
   // DNA parameters
@@ -170,7 +170,7 @@ gsap.registerPlugin(ScrollTrigger);
     emissive: STRAND_A_HEX,
     emissiveIntensity: 0.2,
     transparent: true,
-    opacity: 0.4,
+    opacity: 0.6,
   });
 
   const backboneMatB = new THREE.MeshStandardMaterial({
@@ -178,7 +178,7 @@ gsap.registerPlugin(ScrollTrigger);
     emissive: STRAND_B_HEX,
     emissiveIntensity: 0.2,
     transparent: true,
-    opacity: 0.4,
+    opacity: 0.6,
   });
 
   const yCylinderGeo = new THREE.CylinderGeometry(0.045, 0.045, 1, 8);
@@ -228,7 +228,7 @@ gsap.registerPlugin(ScrollTrigger);
     emissive: WHITE_HEX,
     emissiveIntensity: 0.25,
     transparent: true,
-    opacity: 0.35,
+    opacity: 0.6,
   });
 
   for (let i = 0; i < TOTAL_POINTS; i += 3) {
@@ -251,7 +251,7 @@ gsap.registerPlugin(ScrollTrigger);
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
   scene.add(ambientLight);
 
-  const tealLight = new THREE.PointLight(STRAND_A_HEX, 2, 40);
+  const tealLight = new THREE.PointLight(STRAND_A_HEX, 2.0, 40);
   tealLight.position.set(5, 5, 5);
   scene.add(tealLight);
 
@@ -280,7 +280,7 @@ gsap.registerPlugin(ScrollTrigger);
     color: 0x00D4FF,
     size: 0.1,
     transparent: true,
-    opacity: 0.15, // Reduced particle brightness/opacity
+    opacity: 0.8, // Increased particle brightness/opacity
     blending: THREE.AdditiveBlending,
     depthWrite: false,
   });
