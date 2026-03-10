@@ -99,14 +99,14 @@ canvas {
   height: 100%;
   z-index: 0 !important;
   pointer-events: none;
-  opacity: 0.12;
+  opacity: 1;
   transition: opacity 0.5s ease;
 }
 
 .section:not(#home)~canvas,
 #results~canvas,
 #analyze~canvas {
-  opacity: 0.06 !important;
+  opacity: 1 !important;
 }
 
 /* ========================================
@@ -350,14 +350,14 @@ canvas {
 
 .hero {
   position: relative;
-  z-index: 10;
+  z-index: 1;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 120px 2rem 80px;
   overflow: hidden;
-  background: transparent;
+  background: transparent !important;
   background-image:
     linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
@@ -603,7 +603,7 @@ canvas {
 
 .section {
   position: relative;
-  z-index: 10;
+  z-index: 1;
   padding: 8rem 2rem;
 }
 
@@ -663,6 +663,8 @@ canvas {
 .how-it-works {
   position: relative;
   overflow: hidden;
+  background: rgba(8, 12, 20, 0.92) !important;
+  backdrop-filter: blur(2px);
 }
 
 /* Subtle radial accent behind section */
@@ -1291,7 +1293,9 @@ canvas {
 
 .dna-input-section {
   position: relative;
-  z-index: 10;
+  z-index: 1;
+  background: rgba(8, 12, 20, 0.92) !important;
+  backdrop-filter: blur(2px);
 }
 
 .dna-section-header {
@@ -2287,7 +2291,7 @@ canvas {
    ════════════════════════════════════════════════════════════ */
 
 .results-section {
-  z-index: 10 !important;
+  z-index: 1 !important;
   position: relative !important;
 }
 
@@ -2295,6 +2299,10 @@ canvas {
   padding: 5rem 2rem 6rem;
   max-width: 1340px;
   margin: 0 auto;
+  background: rgba(8, 12, 20, 0.92) !important;
+  backdrop-filter: blur(2px);
+  position: relative;
+  z-index: 1;
 }
 
 /* ── Summary Card ──────────────────────────────────────────── */

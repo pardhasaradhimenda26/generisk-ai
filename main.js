@@ -124,6 +124,7 @@ gsap.registerPlugin(ScrollTrigger);
   const canvas = document.getElementById('dna-canvas');
 
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setClearAlpha(1.0);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
@@ -133,7 +134,7 @@ gsap.registerPlugin(ScrollTrigger);
 
   // Colors
   const STRAND_A_HEX = 0x00D4FF;
-  const STRAND_B_HEX = 0x0099BB;
+  const STRAND_B_HEX = 0x00AACC;
   const WHITE_HEX = 0xFFFFFF;
 
   // DNA parameters
@@ -155,6 +156,8 @@ gsap.registerPlugin(ScrollTrigger);
     emissiveIntensity: 0.4,
     roughness: 0.2,
     metalness: 0.3,
+    transparent: true,
+    opacity: 0.9,
   });
 
   const matB = new THREE.MeshStandardMaterial({
@@ -163,6 +166,8 @@ gsap.registerPlugin(ScrollTrigger);
     emissiveIntensity: 0.4,
     roughness: 0.2,
     metalness: 0.3,
+    transparent: true,
+    opacity: 0.9,
   });
 
   const backboneMatA = new THREE.MeshStandardMaterial({
@@ -170,7 +175,7 @@ gsap.registerPlugin(ScrollTrigger);
     emissive: STRAND_A_HEX,
     emissiveIntensity: 0.2,
     transparent: true,
-    opacity: 0.6,
+    opacity: 0.9,
   });
 
   const backboneMatB = new THREE.MeshStandardMaterial({
@@ -178,7 +183,7 @@ gsap.registerPlugin(ScrollTrigger);
     emissive: STRAND_B_HEX,
     emissiveIntensity: 0.2,
     transparent: true,
-    opacity: 0.6,
+    opacity: 0.9,
   });
 
   const yCylinderGeo = new THREE.CylinderGeometry(0.045, 0.045, 1, 8);
@@ -228,7 +233,7 @@ gsap.registerPlugin(ScrollTrigger);
     emissive: WHITE_HEX,
     emissiveIntensity: 0.25,
     transparent: true,
-    opacity: 0.6,
+    opacity: 0.9,
   });
 
   for (let i = 0; i < TOTAL_POINTS; i += 3) {
@@ -251,11 +256,11 @@ gsap.registerPlugin(ScrollTrigger);
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
   scene.add(ambientLight);
 
-  const tealLight = new THREE.PointLight(STRAND_A_HEX, 2.0, 40);
+  const tealLight = new THREE.PointLight(STRAND_A_HEX, 3.0, 40);
   tealLight.position.set(5, 5, 5);
   scene.add(tealLight);
 
-  const pinkLight = new THREE.PointLight(STRAND_B_HEX, 1.5, 40);
+  const pinkLight = new THREE.PointLight(STRAND_B_HEX, 3.0, 40);
   pinkLight.position.set(-5, -5, 5);
   scene.add(pinkLight);
 
@@ -305,7 +310,8 @@ gsap.registerPlugin(ScrollTrigger);
   });
 
 
-  // Manage helix opacity based on scroll (Dark Techy Redesign)
+  // Removed scroll-based opacity logic to keep DNA helix fully visible
+  /*
   window.addEventListener('scroll', () => {
     const canvas = document.getElementById('dna-canvas');
     if(canvas) {
@@ -316,6 +322,7 @@ gsap.registerPlugin(ScrollTrigger);
       }
     }
   });
+  */
 
   // Sample Sequences Logic
   const samples = {
@@ -323,17 +330,17 @@ gsap.registerPlugin(ScrollTrigger);
     tp53: ">TP53_Sample: chr17:7673802:C:T (p.Arg248Trp)\nATGCGTACGGTGCAGACCGCGCAGACCGCGCGTAGCGTGCGTACGGTGCAGACCGCGCAGACC\n",
     none: ">Control_Sample: No Mutation Detected\nATGCGTACGGTGCAG\n"
   };
-  
+
   document.addEventListener('click', (e) => {
     if (e.target.id === 'btn-sample-brca1') {
       const ta = document.getElementById('dna-textarea');
-      if(ta) { ta.value = samples.brca1; ta.dispatchEvent(new Event('input')); }
+      if (ta) { ta.value = samples.brca1; ta.dispatchEvent(new Event('input')); }
     } else if (e.target.id === 'btn-sample-tp53') {
       const ta = document.getElementById('dna-textarea');
-      if(ta) { ta.value = samples.tp53; ta.dispatchEvent(new Event('input')); }
+      if (ta) { ta.value = samples.tp53; ta.dispatchEvent(new Event('input')); }
     } else if (e.target.id === 'btn-sample-none') {
       const ta = document.getElementById('dna-textarea');
-      if(ta) { ta.value = samples.none; ta.dispatchEvent(new Event('input')); }
+      if (ta) { ta.value = samples.none; ta.dispatchEvent(new Event('input')); }
     }
   });
 
@@ -946,10 +953,10 @@ gsap.registerPlugin(ScrollTrigger);
 
   /* ─── Baseline fallback scores ─────────────────────────── */
   const FALLBACK_SCORES = {
-    'BRCA1': {breast:75, lung:20, colon:15, ovarian:60, blood:15},
-    'TP53':  {breast:30, lung:65, colon:55, ovarian:25, blood:50},
-    'KRAS':  {breast:20, lung:70, colon:65, ovarian:15, blood:20},
-    'NONE':  {breast:12, lung:10, colon:11, ovarian:10, blood:10}
+    'BRCA1': { breast: 75, lung: 20, colon: 15, ovarian: 60, blood: 15 },
+    'TP53': { breast: 30, lung: 65, colon: 55, ovarian: 25, blood: 50 },
+    'KRAS': { breast: 20, lung: 70, colon: 65, ovarian: 15, blood: 20 },
+    'NONE': { breast: 12, lung: 10, colon: 11, ovarian: 10, blood: 10 }
   };
 
   /* ─── Gene rule definitions ─────────────────────────── */
@@ -1066,11 +1073,11 @@ gsap.registerPlugin(ScrollTrigger);
     var dateEl = document.getElementById('summary-meta-date');
 
     if (dateEl) {
-      dateEl.textContent = new Date().toLocaleDateString('en-US', { 
-        month: 'long', day: 'numeric', year: 'numeric' 
+      dateEl.textContent = new Date().toLocaleDateString('en-US', {
+        month: 'long', day: 'numeric', year: 'numeric'
       });
     }
-    
+
     if (mutationsEl) {
       mutationsEl.innerHTML = '';
       const list = (data.mutations && data.mutations.length > 0) ? data.mutations : ['None'];
@@ -1081,11 +1088,11 @@ gsap.registerPlugin(ScrollTrigger);
         mutationsEl.appendChild(span);
       });
     }
-    
+
     if (riskBadgeEl) {
       var risk = data.overallRisk || 'LOW';
       riskBadgeEl.className = 'risk-badge';
-      
+
       if (risk === 'HIGH') {
         riskBadgeEl.textContent = '⚠ elevated risk';
         riskBadgeEl.classList.add('high-badge');
@@ -1287,7 +1294,7 @@ gsap.registerPlugin(ScrollTrigger);
     });
 
     // Force animation trigger
-    setTimeout(function() {
+    setTimeout(function () {
       document.querySelectorAll('.ring-fill').forEach(function (circle) {
         var target = parseFloat(circle.dataset.offset);
         requestAnimationFrame(function () { circle.style.strokeDashoffset = target; });
@@ -1342,18 +1349,18 @@ gsap.registerPlugin(ScrollTrigger);
     // Requested Logic: Determine primary mutation and fallback scores
     const primaryMutation = detectedMutations.length > 0 ? detectedMutations[0] : 'NONE';
     const scores = FALLBACK_SCORES[primaryMutation] || FALLBACK_SCORES['NONE'];
-    
+
     console.log('Scores being used:', scores);
 
     try {
       // Try fetching from Local API (if available)
       var result = await fetchPredictAPI(detectedMutations);
       console.log('ML API Result:', result);
-      
+
       // Update data with result (which falls back to getFallbackData internally)
       analysisData.overallRisk = result.risk_level;
       analysisData.explanation = result.explanation;
-      
+
       // Use result.scores (which will be equivalent to 'scores' variable above if API fails)
       const finalScores = result.scores;
 
@@ -1361,7 +1368,7 @@ gsap.registerPlugin(ScrollTrigger);
       mountRings(finalScores);
       mountMutationsTable(analysisData);
       runTypewriter(analysisData.explanation);
-      
+
       if (typeof drawRadar === 'function') {
         drawRadar(finalScores);
       }
