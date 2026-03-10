@@ -3219,3 +3219,123 @@ body::before {
     justify-content: center;
   }
 }
+/* ========================================
+   Model Comparison Section
+   ======================================== */
+.model-comparison-section {
+  margin-top: 5rem;
+  padding: 0 1rem;
+  margin-bottom: 4rem;
+}
+
+.comparison-header {
+  margin-bottom: 2.5rem !important;
+}
+
+.comparison-title {
+  font-family: var(--font-accent);
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--white);
+  text-align: center;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.comparison-subtitle {
+  color: var(--muted);
+  text-align: center;
+  font-size: 1.05rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.comparison-table-card {
+  max-width: 1000px;
+  margin: 3rem auto 0;
+  background: rgba(255, 255, 255, 0.035);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--white);
+  text-align: left;
+}
+
+.comparison-table thead th {
+  background: var(--teal);
+  color: var(--navy);
+  padding: 1.4rem 2rem;
+  font-family: var(--font-accent);
+  font-weight: 800;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.comparison-table tbody td {
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.98rem;
+  transition: background 0.3s ease;
+}
+
+.comparison-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.comparison-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+/* XGBoost Highlight */
+.comparison-table tr.best-model {
+  background: rgba(255, 215, 0, 0.1) !important;
+  box-shadow: inset 4px 0 0 #FFD700;
+}
+
+.comparison-table tr.best-model td {
+  color: #FFD700;
+  font-weight: 700;
+}
+
+.best-badge {
+  display: inline-flex;
+  align-items: center;
+  background: #FFD700;
+  color: var(--navy);
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-left: 12px;
+  vertical-align: middle;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+  letter-spacing: 0.02em;
+}
+
+/* Responsive Table */
+@media (max-width: 992px) {
+  .comparison-table-card {
+    margin: 2rem 1rem 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .comparison-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+}

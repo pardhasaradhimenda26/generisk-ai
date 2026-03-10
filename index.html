@@ -486,7 +486,7 @@
         <div class="ai-content">
           <div class="ai-gemini-badge">
             <span class="gemini-dot"></span>
-            <span>🧠 GeneRisk Random Forest Model</span>
+            <span>🧠 GeneRisk XGBoost Model — 97.37% Accuracy</span>
           </div>
           <p class="ai-typewriter-text" id="ai-typewriter" aria-live="polite"></p>
           <button id="ai-retry-btn" class="ai-retry-btn hidden" type="button">Retry AI Explanation 🔄</button>
@@ -496,6 +496,58 @@
       </div>
 
     </div><!-- /.dashboard-grid -->
+
+    <!-- ── Model Comparison Section ────────────────────────── -->
+    <div class="model-comparison-section">
+      <div class="section-header comparison-header">
+        <h3 class="comparison-title">Advanced ML Algorithm Comparison</h3>
+        <p class="comparison-subtitle">5 algorithms trained and evaluated — best selected automatically</p>
+      </div>
+      <div class="comparison-table-card">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Algorithm</th>
+              <th>Accuracy</th>
+              <th>ROC-AUC</th>
+              <th>CV Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="best-model">
+              <td>XGBoost <span class="best-badge">★ Best</span></td>
+              <td>97.37%</td>
+              <td>0.9950</td>
+              <td>95.96%</td>
+            </tr>
+            <tr>
+              <td>LightGBM</td>
+              <td>97.37%</td>
+              <td>0.9950</td>
+              <td>97.36%</td>
+            </tr>
+            <tr>
+              <td>SVM</td>
+              <td>98.25%</td>
+              <td>0.9937</td>
+              <td>97.19%</td>
+            </tr>
+            <tr>
+              <td>Random Forest</td>
+              <td>95.61%</td>
+              <td>0.9936</td>
+              <td>95.43%</td>
+            </tr>
+            <tr>
+              <td>Neural Network</td>
+              <td>93.86%</td>
+              <td>0.9927</td>
+              <td>95.44%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
     <!-- ── Recommendation Cards ────────────────────────────── -->
     <div class="recommendations-section">
@@ -551,7 +603,7 @@
         <div class="model-info-grid">
           <div class="model-stat">
             <span class="model-stat-label">Algorithm</span>
-            <span class="model-stat-value">Random Forest Classifier</span>
+            <span class="model-stat-value">XGBoost Classifier</span>
           </div>
           <div class="model-stat">
             <span class="model-stat-label">Accuracy</span>
@@ -559,7 +611,7 @@
           </div>
           <div class="model-stat">
             <span class="model-stat-label">ROC-AUC</span>
-            <span class="model-stat-value">0.9970</span>
+            <span class="model-stat-value">0.9950</span>
           </div>
           <div class="model-stat">
             <span class="model-stat-label">Dataset</span>
