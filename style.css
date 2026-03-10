@@ -2245,6 +2245,7 @@ canvas {
   display: flex;
   align-items: center;
   gap: 0.7rem;
+  background: transparent !important;
 }
 
 .dashboard-dna-icon {
@@ -2258,10 +2259,13 @@ canvas {
   font-size: clamp(1.4rem, 3vw, 2rem);
   font-weight: 800;
   letter-spacing: -0.03em;
-  background: linear-gradient(135deg, var(--white) 50%, var(--teal));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #E2E8F0;
+  background: transparent;
+  background-color: transparent;
+  -webkit-background-clip: unset;
+  background-clip: unset;
+  -webkit-text-fill-color: #E2E8F0;
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
 }
 
 .summary-meta-row {
@@ -3451,6 +3455,12 @@ h6,
   font-family: 'Inter', sans-serif !important;
   font-weight: 700 !important;
   color: var(--text-primary) !important;
+  background: none !important;
+  /* Ensure no background gradient */
+  -webkit-text-fill-color: initial !important;
+  /* Ensure solid text color */
+  text-shadow: none !important;
+  /* Remove any text shadow highlight */
 }
 
 /* Base text overrides */
@@ -4401,6 +4411,13 @@ th {
 
 .dashboard-title {
   color: #E2E8F0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  -webkit-text-fill-color: #E2E8F0 !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  text-decoration: none !important;
+  user-select: none !important;
   font-size: 22px !important;
   font-weight: 700 !important;
   text-shadow: 0 0 20px rgba(0, 212, 255, 0.2) !important;
