@@ -3511,31 +3511,7 @@ body::before {
 }
 
 
-/* ========================================
-   RE-DESIGN OVERRIDES (MEDICAL / CLINICAL)
-   ======================================== */
 
-:root {
-  --bg-primary: #F8FAFC;
-  --bg-secondary: #F0F4F8;
-  --bg-card: #FFFFFF;
-  --text-primary: #0F172A;
-  --text-secondary: #475569;
-  --accent-primary: #0EA5E9;
-  --accent-secondary: #06B6D4;
-  --risk-high: #EF4444;
-  --risk-medium: #F59E0B;
-  --risk-low: #22C55E;
-  --border: #E2E8F0;
-  --shadow: 0 4px 24px rgba(0,0,0,0.08);
-  
-  --navy: var(--bg-primary); 
-  --white: var(--text-primary);
-  --muted: var(--text-secondary);
-  --teal: var(--accent-primary);
-  --glass-bg: var(--bg-card);
-  --glass-border: var(--border);
-}
 
 body {
   background-color: var(--bg-primary);
