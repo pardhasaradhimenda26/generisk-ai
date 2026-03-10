@@ -132,11 +132,9 @@ gsap.registerPlugin(ScrollTrigger);
   camera.position.set(0, 0, 22);
 
   // Colors
-  const TEAL_HEX = 0x1a4a6e;
-  const TEAL_DIM_HEX = 0x0096C7;
+  const STRAND_A_HEX = 0x003344;
+  const STRAND_B_HEX = 0x004455;
   const WHITE_HEX = 0xFFFFFF;
-  const ACCENT_HEX = 0x48CAE4;
-  const ORANGE_HEX = 0x0d3348; // second strand accent
 
   // DNA parameters
   const TURNS = 5;            // number of full helix turns
@@ -152,35 +150,35 @@ gsap.registerPlugin(ScrollTrigger);
   const sphereGeo = new THREE.SphereGeometry(0.18, 12, 12);
 
   const matA = new THREE.MeshStandardMaterial({
-    color: TEAL_HEX,
-    emissive: TEAL_HEX,
-    emissiveIntensity: 0.7,
+    color: STRAND_A_HEX,
+    emissive: STRAND_A_HEX,
+    emissiveIntensity: 0.4,
     roughness: 0.2,
     metalness: 0.3,
   });
 
   const matB = new THREE.MeshStandardMaterial({
-    color: ORANGE_HEX,
-    emissive: ORANGE_HEX,
-    emissiveIntensity: 0.7,
+    color: STRAND_B_HEX,
+    emissive: STRAND_B_HEX,
+    emissiveIntensity: 0.4,
     roughness: 0.2,
     metalness: 0.3,
   });
 
   const backboneMatA = new THREE.MeshStandardMaterial({
-    color: TEAL_HEX,
-    emissive: TEAL_HEX,
-    emissiveIntensity: 0.3,
+    color: STRAND_A_HEX,
+    emissive: STRAND_A_HEX,
+    emissiveIntensity: 0.2,
     transparent: true,
-    opacity: 0.6,
+    opacity: 0.4,
   });
 
   const backboneMatB = new THREE.MeshStandardMaterial({
-    color: ORANGE_HEX,
-    emissive: ORANGE_HEX,
-    emissiveIntensity: 0.3,
+    color: STRAND_B_HEX,
+    emissive: STRAND_B_HEX,
+    emissiveIntensity: 0.2,
     transparent: true,
-    opacity: 0.6,
+    opacity: 0.4,
   });
 
   const yCylinderGeo = new THREE.CylinderGeometry(0.045, 0.045, 1, 8);
@@ -253,11 +251,11 @@ gsap.registerPlugin(ScrollTrigger);
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
   scene.add(ambientLight);
 
-  const tealLight = new THREE.PointLight(TEAL_HEX, 3, 40);
+  const tealLight = new THREE.PointLight(STRAND_A_HEX, 2, 40);
   tealLight.position.set(5, 5, 5);
   scene.add(tealLight);
 
-  const pinkLight = new THREE.PointLight(ORANGE_HEX, 2, 40);
+  const pinkLight = new THREE.PointLight(STRAND_B_HEX, 1.5, 40);
   pinkLight.position.set(-5, -5, 5);
   scene.add(pinkLight);
 
@@ -279,10 +277,10 @@ gsap.registerPlugin(ScrollTrigger);
   floatGeo.setAttribute('position', new THREE.BufferAttribute(floatPos, 3));
 
   const floatMat = new THREE.PointsMaterial({
-    color: TEAL_HEX,
-    size: 0.12,
+    color: 0x00D4FF,
+    size: 0.1,
     transparent: true,
-    opacity: 0.55,
+    opacity: 0.15, // Reduced particle brightness/opacity
     blending: THREE.AdditiveBlending,
     depthWrite: false,
   });
@@ -307,14 +305,14 @@ gsap.registerPlugin(ScrollTrigger);
   });
 
 
-  // Manage helix opacity based on scroll (Medical Redesign)
+  // Manage helix opacity based on scroll (Dark Techy Redesign)
   window.addEventListener('scroll', () => {
     const canvas = document.getElementById('dna-canvas');
     if(canvas) {
       if(window.scrollY > window.innerHeight * 0.4) {
-        canvas.style.opacity = '0.05';
+        canvas.style.opacity = '0.06';
       } else {
-        canvas.style.opacity = '0.15';
+        canvas.style.opacity = '0.12';
       }
     }
   });
@@ -1089,16 +1087,16 @@ gsap.registerPlugin(ScrollTrigger);
       riskBadgeEl.className = 'risk-badge';
       
       if (risk === 'HIGH') {
-        riskBadgeEl.textContent = '⚠️ elevated risk';
+        riskBadgeEl.textContent = '⚠ elevated risk';
         riskBadgeEl.classList.add('high-badge');
-        if (riskExplEl) riskExplEl.textContent = 'One or more elevated cancer risks detected';
+        if (riskExplEl) riskExplEl.textContent = 'High elevation in cancer risk markers detected';
       } else if (risk === 'MEDIUM') {
-        riskBadgeEl.textContent = '⚠️ medium risk';
+        riskBadgeEl.textContent = '⚠ medium risk';
         riskBadgeEl.classList.add('medium-badge');
         if (riskExplEl) riskExplEl.textContent = 'Moderate risk factors identified in genetic profile';
       } else {
         riskBadgeEl.textContent = '✓ low risk';
-        riskBadgeEl.classList.add('low-badge');
+        riskBadgeEl.classList.add('low-badge-color');
         if (riskExplEl) riskExplEl.textContent = 'No significant cancer risks detected';
       }
     }
@@ -1174,7 +1172,7 @@ gsap.registerPlugin(ScrollTrigger);
   /* ─── Helpers ────────────────────────────────────────── */
   function riskClass(pct) {
     if (pct > 60) return 'high';
-    if (pct > 29) return 'mid';
+    if (pct > 29) return 'medium';
     return 'low';
   }
 

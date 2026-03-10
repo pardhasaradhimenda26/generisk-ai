@@ -1,0 +1,27 @@
+# GeneRisk AI Redesign: Dark Techy Aesthetic
+
+- [x] Planning and Analysis
+    - [x] Explore codebase
+    - [x] Verify disk space (C: is full)
+    - [x] Create implementation plan
+- [x] Part 1: DNA Helix Fix
+    - [x] Update `main.js` (opacity, brightness, colors)
+    - [/] Update `style.css` (canvas opacity)
+- [x] Part 2: Color Scheme & Typography
+    - [x] Update CSS variables in `style.css`
+    - [x] Import Google Fonts in `index.html`
+    - [x] Update typography styles in `style.css`
+- [x] Part 3: Layout Components
+    - [x] Redesign Navbar
+    - [x] Redesign Hero Section
+    - [x] Redesign Cards & Badges
+- [x] Part 4: Sections & Features
+    - [x] Update "How It Works" section
+    - [x] Update DNA Input section
+    - [x] Update Results Report Header
+    - [x] Update Algorithm Comparison Table
+- [x] Part 5: Final Polish
+    - [x] Update Footer
+    - [x] Final verification and testing
+- [/] Deployment
+    - [/] Push changes to GitHub
